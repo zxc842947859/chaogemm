@@ -7,18 +7,28 @@
     </van-nav-bar>
     <div class="content">
       <h3 class="title">您好,请登录</h3>
-      <van-form class="form">
-        <van-field placeholder="请输入手机号">
+      <van-form class="form" ref="form">
+        <van-field
+          v-model="form.mobile"
+          name="mobile"
+          :rules="rules.mobile"
+          placeholder="请输入手机号"
+        >
           <template #left-icon>
             <i class="iconfont">&#xe60b;</i>
           </template>
         </van-field>
-        <van-field placeholder="请输入验证码">
+        <van-field
+          v-model="form.code"
+          name="code"
+          :rules="rules.code"
+          placeholder="请输入验证码"
+        >
           <template #left-icon>
             <i class="iconfont">&#xe60c;</i>
           </template>
           <template #button>
-            <span class="code">获取验证码</span>
+            <span class="code" @click="getSMSCode">获取验证码</span>
           </template>
         </van-field>
         <div class="tip">
@@ -28,13 +38,69 @@
           >
         </div>
       </van-form>
-      <van-button block round color="#e40137">确定</van-button>
+      <van-button block round color="#e40137" @click="submit">确定</van-button>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    const validatorMobile = value => {
+      return /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
+        value
+      )
+    }
+    return {
+      rules: {
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'onBlur' },
+          {
+            validator: validatorMobile,
+            message: '请输入正确的手机号',
+            trigger: 'onBlur'
+          }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'onBlur' },
+          {
+            validator: value => {
+              return /^\d{6}$/.test(value)
+            },
+            message: '请输入正确的验证码',
+            trigger: 'onBlur'
+          }
+        ]
+      },
+      form: {
+        mobile: '',
+        code: ''
+      }
+    }
+  },
+  methods: {
+    getSMSCode () {
+      this.$refs.form
+        .validate('mobile')
+        .then(() => {
+          this.$toast.success('验证码')
+        })
+        .catch(() => {
+          this.$toast.fail('验证失败')
+        })
+    },
+    submit () {
+      this.$refs.form
+        .validate()
+        .then(() => {
+          this.$toast.success('验证成功')
+        })
+        .catch(() => {
+          this.$toast.success('验证失败')
+        })
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
