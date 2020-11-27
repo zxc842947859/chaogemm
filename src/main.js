@@ -8,6 +8,8 @@ import 'amfe-flexible'
 import 'normalize.css'
 import '@/style/font/iconfont.css'
 
+import '@/style/main.css'
+
 Vue.use(vant)
 
 Vue.config.productionTip = false
