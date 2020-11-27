@@ -8,4 +8,12 @@ function getAuCode (data) {
   })
 }
 
-export { getAuCode }
+function getAuLogin (data) {
+  return _fetch({
+    url: '/au/login',
+    method: 'post',
+    data
+  })
+}
+
+export { getAuCode, getAuLogin }

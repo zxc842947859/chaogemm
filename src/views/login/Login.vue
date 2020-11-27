@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { getAuCode } from '@/api/login.js'
+import { getAuCode, getAuLogin } from '@/api/login.js'
 export default {
   data () {
     const validatorMobile = value => {
@@ -93,7 +93,7 @@ export default {
         .then(() => {
           if (this.send_flag === false) {
             this.send_flag = true
-            let time = 5
+            let time = 59
             this.tip = `${time} 秒`
             getAuCode({ mobile: this.form.mobile })
               .then(res => {
@@ -125,6 +125,13 @@ export default {
         .validate()
         .then(() => {
           this.$toast.success('验证成功')
+          getAuLogin(this.form)
+            .then(res => {
+              console.log(res)
+            })
+            .catch(error => {
+              console.log(error)
+            })
         })
         .catch(() => {
           this.$toast.success('验证失败')
@@ -159,7 +166,7 @@ export default {
 
       .code {
         display: inline-block;
-        width: 80px;
+        width: 90px;
         position: relative;
         font-size: 16px;
         font-family: PingFangSC, PingFangSC-Regular;
