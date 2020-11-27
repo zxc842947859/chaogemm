@@ -28,7 +28,12 @@
             <i class="iconfont">&#xe60c;</i>
           </template>
           <template #button>
-            <span class="code" @click="getSMSCode">获取验证码</span>
+            <span
+              class="code"
+              :class="{ red: send_flag }"
+              @click="getSMSCode"
+              >{{ tip }}</span
+            >
           </template>
         </van-field>
         <div class="tip">
@@ -44,6 +49,7 @@
 </template>
 
 <script>
+import { getAuCode } from '@/api/login.js'
 export default {
   data () {
     const validatorMobile = value => {
@@ -65,7 +71,7 @@ export default {
           { required: true, message: '请输入验证码', trigger: 'onBlur' },
           {
             validator: value => {
-              return /^\d{6}$/.test(value)
+              return /^\d{4}$/.test(value)
             },
             message: '请输入正确的验证码',
             trigger: 'onBlur'
@@ -75,7 +81,9 @@ export default {
       form: {
         mobile: '',
         code: ''
-      }
+      },
+      tip: '获取验证码',
+      send_flag: false
     }
   },
   methods: {
@@ -83,7 +91,30 @@ export default {
       this.$refs.form
         .validate('mobile')
         .then(() => {
-          this.$toast.success('验证码')
+          if (this.send_flag === false) {
+            this.send_flag = true
+            let time = 5
+            this.tip = `${time} 秒`
+            getAuCode({ mobile: this.form.mobile })
+              .then(res => {
+                this.$toast.success(res.data.data)
+                const timerId = setInterval(() => {
+                  if (time > 1) {
+                    time--
+                    this.tip = `${time} 秒`
+                  } else {
+                    clearInterval(timerId)
+                    this.tip = '获取验证码'
+                    this.send_flag = false
+                  }
+                }, 1000)
+              })
+              .catch(error => {
+                console.log(error)
+                this.send_flag = false
+                this.tip = '获取验证码'
+              })
+          }
         })
         .catch(() => {
           this.$toast.fail('验证失败')
@@ -127,12 +158,18 @@ export default {
       margin-bottom: 44px;
 
       .code {
+        display: inline-block;
+        width: 80px;
         position: relative;
         font-size: 16px;
         font-family: PingFangSC, PingFangSC-Regular;
         color: #00b8d4;
         line-height: 22.5px;
         letter-spacing: 0px;
+        text-align: center;
+      }
+      .red {
+        color: red;
       }
       .code::before {
         position: absolute;
