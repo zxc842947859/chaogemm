@@ -9,6 +9,7 @@
       <h3 class="title">您好,请登录</h3>
       <van-form class="form" ref="form">
         <van-field
+          type="digit"
           v-model="form.mobile"
           name="mobile"
           :rules="rules.mobile"
@@ -19,6 +20,7 @@
           </template>
         </van-field>
         <van-field
+          type="digit"
           v-model="form.code"
           name="code"
           :rules="rules.code"
@@ -50,6 +52,7 @@
 
 <script>
 import { getAuCode, getAuLogin } from '@/api/login.js'
+import { setLocal } from '@/utils/local.js'
 export default {
   data () {
     const validatorMobile = value => {
@@ -127,7 +130,7 @@ export default {
           this.$toast.success('验证成功')
           getAuLogin(this.form)
             .then(res => {
-              console.log(res)
+              setLocal('token', res.data.data.jwt)
             })
             .catch(error => {
               console.log(error)
@@ -166,7 +169,7 @@ export default {
 
       .code {
         display: inline-block;
-        width: 90px;
+        width: 80px;
         position: relative;
         font-size: 16px;
         font-family: PingFangSC, PingFangSC-Regular;
