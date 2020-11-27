@@ -130,7 +130,13 @@ export default {
           this.$toast.success('验证成功')
           getAuLogin(this.form)
             .then(res => {
+              console.log(res)
+              // 存储jwt 授权凭证
               setLocal('token', res.data.data.jwt)
+              // 存储用户信息
+              this.$store.commit('setUserInfo', res.data.data.user)
+              // 设置为登录状态
+              this.$store.commit('setLoginState', true)
             })
             .catch(error => {
               console.log(error)
