@@ -76,7 +76,7 @@ router.beforeEach((to, from, next) => {
       .catch(() => {})
   } else {
     // 要登录,但未登录,如果没有token跳转到登录
-    router.push('/login')
+    router.push('/login?next=' + to.fullPath)
   }
 })
 

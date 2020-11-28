@@ -49,12 +49,12 @@
             <div class="item-1">
               昨日阅读<span class="color"
                 >+{{
-                  (userInfo.shareData && userInfo.shareData.read.yesterday) || 0
+                  userInfo.shareData ? userInfo.shareData.read.yesterday : 0
                 }}</span
               >
             </div>
             <div class="item-2">
-              {{ (userInfo.shareData && userInfo.shareData.read.total) || 0 }}
+              {{ userInfo.shareData ? userInfo.shareData.read.total : 0 }}
             </div>
             <div class="item-3">阅读总数</div>
           </li>
@@ -62,12 +62,12 @@
             <div class="item-1">
               昨日获赞<span class="color"
                 >+{{
-                  (userInfo.shareData && userInfo.shareData.star.yesterday) || 0
+                  userInfo.shareData ? userInfo.shareData.star.yesterday : 0
                 }}</span
               >
             </div>
             <div class="item-2">
-              {{ (userInfo.shareData && userInfo.shareData.star.total) || 0 }}
+              {{ userInfo.shareData ? userInfo.shareData.star.total : 0 }}
             </div>
             <div class="item-3">获赞总数</div>
           </li>
@@ -75,16 +75,12 @@
             <div class="item-1">
               昨日新增<span class="color"
                 >+{{
-                  (userInfo.shareData &&
-                    userInfo.shareData.comment.yesterday) ||
-                    0
+                  userInfo.shareData ? userInfo.shareData.comment.yesterday : 0
                 }}</span
               >
             </div>
             <div class="item-2">
-              {{
-                (userInfo.shareData && userInfo.shareData.comment.total) || 0
-              }}
+              {{ userInfo.shareData ? userInfo.shareData.comment.total : 0 }}
             </div>
             <div class="item-3">评论总数</div>
           </li>

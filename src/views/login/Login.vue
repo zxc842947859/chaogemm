@@ -137,7 +137,7 @@ export default {
               // 设置为登录状态
               this.$store.commit('setLoginState', true)
               this.$toast.clear()
-              this.$router.push('/home')
+              this.$router.push(this.$route.query.next ? this.$route.query.next : '/home')
             })
             .catch(error => {
               console.log(error)
@@ -150,7 +150,7 @@ export default {
   },
   created () {
     if (getLocal('token')) {
-      this.$router.push('/home')
+      this.$router.push(this.$route.query.next ? this.$route.query.next : '/home')
     }
   }
 }
