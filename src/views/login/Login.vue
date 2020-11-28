@@ -127,16 +127,17 @@ export default {
       this.$refs.form
         .validate()
         .then(() => {
-          this.$toast.success('验证成功')
+          this.$toast.loading('登录加')
           getAuLogin(this.form)
             .then(res => {
-              console.log(res)
               // 存储jwt 授权凭证
               setLocal('token', res.data.data.jwt)
               // 存储用户信息
               this.$store.commit('setUserInfo', res.data.data.user)
               // 设置为登录状态
               this.$store.commit('setLoginState', true)
+              this.$toast.clear()
+              this.$router.push('/home')
             })
             .catch(error => {
               console.log(error)
