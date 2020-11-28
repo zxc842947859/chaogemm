@@ -1,7 +1,7 @@
 <template>
   <van-cell is-link center class="cell">
     <template #icon>
-      <i class="iconfont" v-html="icon"></i>
+      <i v-if="icon" class="iconfont" v-html="icon"></i>
     </template>
     <template #title>
       <div class="cell-title">
@@ -9,7 +9,19 @@
       </div>
     </template>
     <template #default>
-      <div class="right-title">
+      <img
+        class="img"
+        v-if="type === 'img' && value"
+        :src="baseURL + value"
+        alt=""
+      />
+      <img
+        class="img"
+        v-else-if="type === 'img'"
+        src="@/assets/logo.png"
+        alt=""
+      />
+      <div v-else class="right-title">
         {{ value }}
       </div>
     </template>
@@ -18,7 +30,12 @@
 
 <script>
 export default {
-  props: ['icon', 'title', 'value']
+  props: ['icon', 'title', 'value', 'type'],
+  data () {
+    return {
+      baseURL: process.env.VUE_APP_URL
+    }
+  }
 }
 </script>
 
@@ -46,6 +63,11 @@ export default {
     color: #5b5d75;
     line-height: 20px;
     letter-spacing: 0px;
+  }
+  .img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
   }
 }
 </style>

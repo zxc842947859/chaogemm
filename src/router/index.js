@@ -7,6 +7,7 @@ import Company from '@/views/home/company/Company'
 import Question from '@/views/home/question/Question'
 import Find from '@/views/home/find/Find'
 import Mine from '@/views/home/mine/Mine'
+import MineInfo from '@/views/home/mine/MineInfo'
 
 Vue.use(VueRouter)
 
@@ -26,20 +27,24 @@ const router = new VueRouter({
       redirect: '/home/mine',
       children: [
         {
-          path: 'company',
+          path: '/home/company',
           component: Company
         },
         {
-          path: 'question',
+          path: '/home/question',
           component: Question
         },
         {
-          path: 'find',
+          path: '/home/find',
           component: Find
         },
         {
-          path: 'mine',
+          path: '/home/mine',
           component: Mine
+        },
+        {
+          path: '/home/info',
+          component: MineInfo
         }
       ]
     }

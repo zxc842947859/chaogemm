@@ -1,11 +1,10 @@
 <template>
   <div class="home">
     <van-tabbar
-      placeholder
       inactive-color="#b4b4bd"
       active-color="#e40137"
       route
-      safe-area-inset-bottom
+      placeholder
     >
       <van-tabbar-item to="/home/company">
         <template #default>

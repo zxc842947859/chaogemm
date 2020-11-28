@@ -3,11 +3,12 @@
     <div class="top">
       <div class="top-info">
         <div class="left-title">
-          <h3>续命咖啡</h3>
-          <p>面试不求人,我有面试宝典</p>
+          <h3>{{ userInfo.nickname }}</h3>
+          <p>{{ userInfo.intro }}</p>
         </div>
         <div class="mine-icon">
-          <img src="@/assets/logo.png" alt="" />
+          <img v-if="userInfo.avatar" :src="baseUrl + userInfo.avatar" alt="" />
+          <img v-else src="@/assets/logo.png" alt="" />
         </div>
       </div>
       <ul class="top-num">
@@ -67,9 +68,18 @@
 
 <script>
 import MineCell from './MineCell'
+import { mapState } from 'vuex'
 export default {
   components: {
     MineCell
+  },
+  computed: {
+    ...mapState(['userInfo', 'isLogin'])
+  },
+  data () {
+    return {
+      baseUrl: process.env.VUE_APP_URL
+    }
   }
 }
 </script>
