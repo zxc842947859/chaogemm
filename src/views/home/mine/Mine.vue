@@ -13,19 +13,27 @@
       </div>
       <ul class="top-num">
         <li>
-          <div class="num">298</div>
+          <div class="num">{{ userInfo.submitNum }}</div>
           <div class="txt">累计答题</div>
         </li>
         <li>
-          <div class="num">98</div>
+          <div class="num">{{ userInfo.collectQuestions.length }}</div>
           <div class="txt">收藏题目</div>
         </li>
         <li>
-          <div class="num">198</div>
+          <div class="num">{{ userInfo.errorNum }}</div>
           <div class="txt">我的错题</div>
         </li>
         <li>
-          <div class="num">76<span class="percent">%</span></div>
+          <div class="num">
+            {{
+              userInfo.submitNum
+                ? (
+                    userInfo.correctQuestions.length / userInfo.submitNum
+                  ).toFixed(2)
+                : 100
+            }}<span class="percent">%</span>
+          </div>
           <div class="txt">正确率</div>
         </li>
       </ul>
@@ -38,18 +46,46 @@
         <h3 class="middle-title">面经数据</h3>
         <ul class="middle-num">
           <li class="middle-num-item">
-            <div class="item-1">昨日阅读<span class="color">+300</span></div>
-            <div class="item-2">17</div>
+            <div class="item-1">
+              昨日阅读<span class="color"
+                >+{{
+                  (userInfo.shareData && userInfo.shareData.read.yesterday) || 0
+                }}</span
+              >
+            </div>
+            <div class="item-2">
+              {{ (userInfo.shareData && userInfo.shareData.read.total) || 0 }}
+            </div>
             <div class="item-3">阅读总数</div>
           </li>
           <li class="middle-num-item">
-            <div class="item-1">昨日获赞<span class="color">+300</span></div>
-            <div class="item-2">17</div>
+            <div class="item-1">
+              昨日获赞<span class="color"
+                >+{{
+                  (userInfo.shareData && userInfo.shareData.star.yesterday) || 0
+                }}</span
+              >
+            </div>
+            <div class="item-2">
+              {{ (userInfo.shareData && userInfo.shareData.star.total) || 0 }}
+            </div>
             <div class="item-3">获赞总数</div>
           </li>
           <li class="middle-num-item">
-            <div class="item-1">昨日新增<span class="color">+12</span></div>
-            <div class="item-2">17</div>
+            <div class="item-1">
+              昨日新增<span class="color"
+                >+{{
+                  (userInfo.shareData &&
+                    userInfo.shareData.comment.yesterday) ||
+                    0
+                }}</span
+              >
+            </div>
+            <div class="item-2">
+              {{
+                (userInfo.shareData && userInfo.shareData.comment.total) || 0
+              }}
+            </div>
             <div class="item-3">评论总数</div>
           </li>
         </ul>
