@@ -23,6 +23,7 @@ const router = new VueRouter({
     {
       path: '/home',
       component: Home,
+      redirect: '/home/mine',
       children: [
         {
           path: 'company',
