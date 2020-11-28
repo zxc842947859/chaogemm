@@ -52,7 +52,7 @@
 
 <script>
 import { getAuCode, getAuLogin } from '@/api/login.js'
-import { setLocal } from '@/utils/local.js'
+import { setLocal, getLocal } from '@/utils/local.js'
 export default {
   data () {
     const validatorMobile = value => {
@@ -146,6 +146,11 @@ export default {
         .catch(() => {
           this.$toast.success('验证失败')
         })
+    }
+  },
+  created () {
+    if (getLocal('token')) {
+      this.$router.push('/home')
     }
   }
 }
