@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import { Toast } from 'vant'
 
-import { removeLocal } from '@/utils/local.js'
+import { removeLocal, getLocal } from '@/utils/local.js'
 import store from '@/store'
 import router from '@/router'
 
@@ -16,6 +16,9 @@ Vue.prototype.$axios = _fetch
 
 _fetch.interceptors.request.use(
   config => {
+    if (config.needToken) {
+      config.headers.authorization = `Bearer ${getLocal('token')}`
+    }
     return config
   },
   error => {
