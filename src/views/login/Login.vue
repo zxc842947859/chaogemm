@@ -1,10 +1,6 @@
 <template>
   <div class="login">
-    <van-nav-bar placeholder @click-left="$router.push('/home/find')">
-      <template #left>
-        <i class="iconfont f44">&#xe637;</i>
-      </template>
-    </van-nav-bar>
+    <CGNavBar path="/home/find"></CGNavBar>
     <div class="content">
       <h3 class="title">您好,请登录</h3>
       <van-form class="form" ref="form">
@@ -163,7 +159,9 @@ export default {
 <style lang="less" scoped>
 .login {
   height: 100%;
-
+  &::v-deep .van-field__control {
+    padding-left: 10px;
+  }
   .f44 {
     font-size: 44px;
   }
@@ -218,14 +216,6 @@ export default {
         color: #00b8d4;
       }
     }
-  }
-}
-</style>
-
-<style lang="less">
-.login {
-  .van-field__control {
-    padding-left: 10px;
   }
 }
 </style>

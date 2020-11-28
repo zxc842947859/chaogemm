@@ -1,5 +1,6 @@
 <template>
   <div class="mine-info">
+    <CGNavBar title="我的资料" path="/home/mine"></CGNavBar>
     <div class="content">
       <MineCell
         class="icon"

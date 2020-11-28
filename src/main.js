@@ -9,6 +9,9 @@ import 'normalize.css'
 import '@/style/font/iconfont.css'
 
 import '@/style/main.css'
+import CGNavBar from '@/components/CGNavBar'
+
+Vue.component('CGNavBar', CGNavBar)
 
 Vue.use(vant)
 
