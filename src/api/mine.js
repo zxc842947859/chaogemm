@@ -11,4 +11,13 @@ function auInfo () {
   })
 }
 
-export { auInfo }
+function auEdit (data) {
+  return _fetch({
+    url: '/au/edit',
+    method: 'post',
+    needToken: true,
+    data
+  })
+}
+
+export { auInfo, auEdit }

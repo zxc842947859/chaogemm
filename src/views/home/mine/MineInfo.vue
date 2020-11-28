@@ -10,7 +10,11 @@
       ></MineCell>
       <div class="middle">
         <MineCell title="昵称" :value="userInfo.nickname"></MineCell>
-        <MineCell title="性别" :value="genderObj[userInfo.gender]"></MineCell>
+        <MineCell
+          title="性别"
+          :value="genderObj[userInfo.gender]"
+          @click.native="showGenderUpdateBox = true"
+        ></MineCell>
         <MineCell
           title="地区"
           :value="area.city_list[userInfo.area]"
@@ -25,6 +29,16 @@
         </template>
       </van-button>
     </div>
+    <van-popup v-model="showGenderUpdateBox" position="bottom">
+      <van-picker
+        title="修改性别"
+        show-toolbar
+        :default-index="userInfo.gender"
+        :columns="Object.values(genderObj)"
+        @confirm="onConfirm"
+        @cancel="showGenderUpdateBox = false"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -33,6 +47,7 @@ import MineCell from './MineCell'
 import { mapState } from 'vuex'
 import area from '@/assets/js/area.js'
 import { removeLocal } from '@/utils/local.js'
+import { auEdit } from '@/api/mine.js'
 export default {
   components: {
     MineCell
@@ -47,7 +62,8 @@ export default {
         1: '男',
         2: '女'
       },
-      area: area
+      area,
+      showGenderUpdateBox: false
     }
   },
   methods: {
@@ -63,6 +79,13 @@ export default {
           this.$router.push('/login') // 跳转登录界面
         })
         .catch(() => {})
+    },
+    onConfirm (value, index) {
+      this.showGenderUpdateBox = false
+      this.userInfo.gender = index
+      auEdit({ gender: index }).then(() => {
+        this.$toast.success('修改成功')
+      })
     }
   }
 }
