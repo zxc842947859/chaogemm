@@ -65,7 +65,6 @@ export default {
 <style lang="less" scope>
 .home {
   background: #f6f4f5;
-
   min-height: 100%;
   .iconfont {
     font-size: 29px;

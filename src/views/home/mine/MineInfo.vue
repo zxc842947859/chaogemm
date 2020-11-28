@@ -17,7 +17,7 @@
         ></MineCell>
         <MineCell title="个人简介" :value="userInfo.intro"></MineCell>
       </div>
-      <van-button block color="#fff" class="logout">
+      <van-button block color="#fff" class="logout" @click="logout">
         <template #default>
           <div class="logout-txt">
             退出登录
@@ -32,6 +32,7 @@
 import MineCell from './MineCell'
 import { mapState } from 'vuex'
 import area from '@/assets/js/area.js'
+import { removeLocal } from '@/utils/local.js'
 export default {
   components: {
     MineCell
@@ -48,13 +49,28 @@ export default {
       },
       area: area
     }
+  },
+  methods: {
+    logout () {
+      this.$dialog
+        .confirm({
+          title: '温馨提示',
+          message: '您确定要退出登录吗?'
+        })
+        .then(() => {
+          removeLocal('token') // 删除token
+          this.$store.commit('setLoginState', false) // 修改登录状态
+          this.$router.push('/login') // 跳转登录界面
+        })
+        .catch(() => {})
+    }
   }
 }
 </script>
 
 <style lang="less" scope>
 .mine-info {
-  height: 100%;
+  min-height: 100%;
   .content {
     padding: 19px @p15;
     .icon {
