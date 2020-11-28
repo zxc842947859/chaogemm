@@ -6,6 +6,7 @@
       active-color="#e40137"
       route
       placeholder
+      v-if="$route.meta.needTabBar"
     >
       <van-tabbar-item to="/home/company">
         <template #default>

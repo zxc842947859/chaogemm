@@ -31,24 +31,32 @@ const router = new VueRouter({
       children: [
         {
           path: '/home/company',
-          component: Company
+          component: Company,
+          meta: {
+            needTabBar: true
+          }
         },
         {
           path: '/home/question',
           component: Question,
           meta: {
-            needLogin: true
+            needLogin: true,
+            needTabBar: true
           }
         },
         {
           path: '/home/find',
-          component: Find
+          component: Find,
+          meta: {
+            needTabBar: true
+          }
         },
         {
           path: '/home/mine',
           component: Mine,
           meta: {
-            needLogin: true
+            needLogin: true,
+            needTabBar: true
           }
         },
         {
