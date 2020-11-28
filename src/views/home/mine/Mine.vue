@@ -29,21 +29,7 @@
         </li>
       </ul>
       <div class="i-post">
-        <van-cell is-link center class="cell">
-          <template #icon>
-            <i class="iconfont">&#xe64d;</i>
-          </template>
-          <template #title>
-            <div class="cell-title">
-              我的岗位
-            </div>
-          </template>
-          <template #default>
-            <div class="right-title">
-              产品经理
-            </div>
-          </template>
-        </van-cell>
+        <MineCell icon="&#xe64d;" title="我的岗位" value="产品经理"></MineCell>
       </div>
     </div>
     <div class="content">
@@ -67,24 +53,38 @@
           </li>
         </ul>
       </div>
+      <div class="bottom">
+        <MineCell icon="&#xe64d;" title="我的面经分享" value="21"></MineCell>
+        <MineCell icon="&#xe64d;" title="我的消息" value="98"></MineCell>
+        <MineCell icon="&#xe64d;" title="收藏题库" value="32"></MineCell>
+        <MineCell icon="&#xe64d;" title="收藏企业" value="32"></MineCell>
+        <MineCell icon="&#xe64d;" title="我的错题" value="123"></MineCell>
+        <MineCell icon="&#xe64d;" title="收藏的面试经验" value="166"></MineCell>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import MineCell from './MineCell'
+export default {
+  components: {
+    MineCell
+  }
+}
 </script>
 
 <style lang="less" scope>
+.van-tabbar__placeholder {
+  background: #ce0031;
+}
 .mine {
-  height: 100%;
   background: #f6f4f5;
   .top {
     position: relative;
     // height: 259px;
-    padding-top: 71px;
-    padding: 71px @p15 0 @p15;
-    background: linear-gradient(45deg, #ce0031, #b8002c);
+    padding: 31px @p15 0 @p15;
+    background: #ce0031;
     .top-info {
       margin-bottom: 28px;
       display: flex;
@@ -156,35 +156,11 @@ export default {}
       right: @p15;
       border-radius: 8px;
       overflow: hidden;
-      .cell {
-        height: 55px;
-        .iconfont {
-          font-size: 20px;
-          margin-right: 6px;
-        }
-        .cell-title {
-          font-size: 14px;
-          font-family: PingFangSC, PingFangSC-Regular;
-          font-weight: 400;
-          text-align: left;
-          color: #181a39;
-          line-height: 20px;
-          letter-spacing: 0px;
-        }
-        .right-title {
-          font-size: 14px;
-          font-family: PingFangSC, PingFangSC-Regular;
-          font-weight: 400;
-          text-align: right;
-          color: #5b5d75;
-          line-height: 20px;
-          letter-spacing: 0px;
-        }
-      }
     }
   }
   .content {
-    padding: 27px @p15 10px;
+    padding: 27px @p15;
+
     .middle {
       background-color: #fff;
       padding: 19px 15px;
@@ -203,6 +179,7 @@ export default {}
         justify-content: space-around;
         align-items: center;
         margin-top: 17px;
+
         .middle-num-item {
           text-align: center;
           .item-1 {
@@ -236,6 +213,12 @@ export default {}
           }
         }
       }
+    }
+    .bottom {
+      margin-top: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 30px;
     }
   }
 }

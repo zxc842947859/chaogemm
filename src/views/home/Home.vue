@@ -1,11 +1,13 @@
 <template>
   <div class="home">
     <van-tabbar
+      placeholder
       inactive-color="#b4b4bd"
       active-color="#e40137"
       route
+      safe-area-inset-bottom
     >
-      <van-tabbar-item to='/home/company'>
+      <van-tabbar-item to="/home/company">
         <template #default>
           <span class="title">
             公司
@@ -15,7 +17,7 @@
           <i class="iconfont">&#xe63d;</i>
         </template>
       </van-tabbar-item>
-      <van-tabbar-item to='/home/question'>
+      <van-tabbar-item to="/home/question">
         <template #default>
           <div class="title">
             刷题
@@ -25,7 +27,7 @@
           <i class="iconfont">&#xe63f;</i>
         </template>
       </van-tabbar-item>
-      <van-tabbar-item to='/home/find'>
+      <van-tabbar-item to="/home/find">
         <template #default>
           <div class="title">
             发现
@@ -35,7 +37,7 @@
           <i class="iconfont">&#xe646;</i>
         </template>
       </van-tabbar-item>
-      <van-tabbar-item to='/home/mine'>
+      <van-tabbar-item to="/home/mine">
         <template #default>
           <div class="title">
             我的
