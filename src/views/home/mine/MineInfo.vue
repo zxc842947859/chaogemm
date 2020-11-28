@@ -54,7 +54,6 @@ export default {
 <style lang="less" scope>
 .mine-info {
   height: 100%;
-  background: #f6f4f5;
   .content {
     padding: 19px @p15;
     .icon {

@@ -1,7 +1,7 @@
 <template>
   <div class="mine">
     <div class="top">
-      <div class="top-info">
+      <div class="top-info" @click="goMineInfo">
         <div class="left-title">
           <h3>{{ userInfo.nickname }}</h3>
           <p>{{ userInfo.intro }}</p>
@@ -112,16 +112,18 @@ export default {
     return {
       baseUrl: process.env.VUE_APP_URL
     }
+  },
+  methods: {
+    goMineInfo () {
+      this.$router.push('/home/mineInfo')
+    }
   }
 }
 </script>
 
 <style lang="less" scope>
-.van-tabbar__placeholder {
-  background: #ce0031;
-}
 .mine {
-  background: #f6f4f5;
+  min-height: 100%;
   .top {
     position: relative;
     // height: 259px;
@@ -260,7 +262,7 @@ export default {
       margin-top: 10px;
       border-radius: 8px;
       overflow: hidden;
-      margin-bottom: 30px;
+      // margin-bottom: 30px;
     }
   }
 }

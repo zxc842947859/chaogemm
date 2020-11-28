@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <router-view></router-view>
     <van-tabbar
       inactive-color="#b4b4bd"
       active-color="#e40137"
@@ -47,7 +48,6 @@
         </template>
       </van-tabbar-item>
     </van-tabbar>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -63,7 +63,9 @@ export default {
 
 <style lang="less" scope>
 .home {
-  height: 100%;
+  background: #f6f4f5;
+
+  min-height: 100%;
   .iconfont {
     font-size: 29px;
   }

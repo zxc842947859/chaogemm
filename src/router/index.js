@@ -52,8 +52,11 @@ const router = new VueRouter({
           }
         },
         {
-          path: '/home/info',
-          component: MineInfo
+          path: '/home/mineInfo',
+          component: MineInfo,
+          meta: {
+            needLogin: true
+          }
         }
       ]
     }

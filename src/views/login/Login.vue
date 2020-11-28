@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <van-nav-bar @click-left="$router.push('/home/find')">
+    <van-nav-bar placeholder @click-left="$router.push('/home/find')">
       <template #left>
         <i class="iconfont f44">&#xe637;</i>
       </template>
