@@ -7,6 +7,7 @@
         title="头像"
         :value="userInfo.avatar"
         type="img"
+        @click.native="$router.push('/home/infoEdit?type=avatar')"
       ></MineCell>
       <div class="middle">
         <MineCell

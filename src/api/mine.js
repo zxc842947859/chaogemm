@@ -22,4 +22,14 @@ function auEdit (data) {
   })
 }
 
-export { auInfo, auEdit }
+// 上传头像
+function uploadIcon (data) {
+  return _fetch({
+    url: '/upload',
+    method: 'post',
+    needToken: true,
+    data
+  })
+}
+
+export { auInfo, auEdit, uploadIcon }

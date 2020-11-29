@@ -8,10 +8,12 @@
     ></CGNavBar>
     <div class="content">
       <van-field
+        v-if="type !== 'avatar'"
         v-model="inputValue"
         class="field"
         :type="type !== 'intro' ? 'text' : 'textarea'"
       ></van-field>
+      <CGUploadFile v-else v-model="inputValue"></CGUploadFile>
     </div>
   </div>
 </template>
@@ -28,7 +30,8 @@ export default {
       navTitleObj: {
         nickname: '修改昵称',
         intro: '修改个人简介',
-        position: '修改职位'
+        position: '修改职位',
+        avatar: '上传头像'
       }
     }
   },
@@ -36,6 +39,7 @@ export default {
     ...mapState(['userInfo'])
   },
   created () {
+    // 修改前用户信息显示
     this.inputValue = this.userInfo[this.type]
   },
   methods: {
@@ -54,6 +58,7 @@ export default {
     }
   },
   watch: {
+    // 根据用户是否修改及是否为空 动态显示导航条右上角保存
     inputValue (newVal) {
       this.saveStr = newVal && newVal !== this.userInfo[this.type] ? '保存' : ''
     }
@@ -65,6 +70,7 @@ export default {
 .mine-info-edit {
   min-height: 100%;
   .content {
+    text-align: center;
     padding: 20px @p15;
     .field {
       border-radius: 8px;

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style></style>
+  <body>
+    <div id="app">
+      <!-- uploader
+    el-upload   before-upload:(file)=>{file文件对象  return boolean  true:正常上传  false:中止上传 }
+    van-uploader
+       v-model:上传的图片数组[{url:"图片地址"}]
+       before-read:上传前(file)=>{file文件对象,file.type文件类型 file.size:文件大小,
+        return boolean  true:正常上传  false:中止上传}  '
+       after-read:读取后,before-read return 了true就到它了  (res)=>{ // 接口调用}
+-->
+      <van-uploader
+        v-model="list"
+        :before-read="beforeRead"
+        :after-read="afterRead"
+      ></van-uploader>
+    </div>
+    <!-- 引入样式文件 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vant@2.10/lib/index.css"
+    />
+
+    <!-- 引入 Vue 和 Vant 的 JS 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vant@2.10/lib/vant.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          list: []
+        },
+        methods: {
+          beforeRead (file) {
+            window.console.log(file)
+            const isImg =
+              file.type === 'image/jpeg' || file.type === 'image/png'
+            if (!isImg) {
+              this.$toast.fail('只能上传png,jpeg格式图片')
+            }
+            const limit2M = file.size / 1024 / 1024 < 2
+            if (!limit2M) {
+              this.$toast.fail('只能上传2M内文件')
+            }
+            return isImg && limit2M
+          },
+          afterRead (res) {
+            //   res.content:文件的base64数据格式  res.file:文件对象
+            // window.console.log(res)
+            let _formDate = new FormData()
+            _formDate.append('files', res.file)
+            // 接口上传
+            // axios({
+            //   url: 'http://localhost:1337/upload',
+            //   method: 'post',
+            //   headers: {
+            //     authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNjA2NjExMjI1LCJleHAiOjE2MDkyMDMyMjV9.a2xCc8Pb43dVFWdskhhRFWGIjMxbVFdhTVZgZ5P8kOY`
+            //   },
+            //   data: _formDate
+            // }).then(res2 => {
+            //   window.console.log(res2)
+            // })
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
