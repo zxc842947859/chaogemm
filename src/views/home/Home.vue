@@ -62,7 +62,7 @@ export default {
 }
 </script>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 .home {
   background: #f6f4f5;
   min-height: 100%;

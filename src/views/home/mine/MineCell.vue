@@ -39,7 +39,7 @@ export default {
 }
 </script>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 .cell {
   height: 55px;
   .iconfont {

@@ -9,7 +9,7 @@
         type="img"
       ></MineCell>
       <div class="middle">
-        <MineCell title="昵称" :value="userInfo.nickname"></MineCell>
+        <MineCell title="昵称" :value="userInfo.nickname" @click.native="goInfoEdit"></MineCell>
         <MineCell
           title="性别"
           :value="genderObj[userInfo.gender]"
@@ -30,6 +30,19 @@
         </template>
       </van-button>
     </div>
+    <!-- van-popup 弹出层
+      一般配合picker 和 城市选择使用
+      v-model="Boolean" 是否弹出
+      position="显示位置"
+     -->
+
+    <!-- van-picker 数据滚动选择
+        title="toolbar中的标题"
+        default-index="默认选择的数据和columns中的元素对应"
+        columns="要选择的数组数据"
+        @cancel="取消事件"
+        @confirm="确定事件"
+     -->
     <van-popup v-model="showGenderUpdateBox" position="bottom">
       <van-picker
         title="修改性别"
@@ -40,11 +53,21 @@
         @cancel="showGenderUpdateBox = false"
       />
     </van-popup>
+    <!-- 城市选择
+    van-area
+      title: 中间标题
+      https://raw.githubusercontent.com/youzan/vant/dev/src/area/demo/area.js
+      area-list: 我们导入的area.js (传数据省市区数据)
+      value: 默认选择的城市(城市code)
+      columns-num: (3:省市区, 2:省市, 1:省)
+      @cancel="取消事件"
+      @confirm="确定事件"
+     -->
     <van-popup v-model="showCity" position="bottom">
       <van-area
         title="修改地区"
         :area-list="area"
-        :columns-num="2"
+        columns-num="2"
         :value="userInfo.area"
         @cancel="showCity = false"
         @confirm="cityConfirm"
@@ -79,49 +102,50 @@ export default {
     }
   },
   methods: {
-    logout () {
-      this.$dialog
-        .confirm({
+    // 退出登录
+    async logout () {
+      try {
+        await this.$dialog.confirm({
           title: '温馨提示',
           message: '您确定要退出登录吗?'
         })
-        .then(() => {
-          removeLocal('token') // 删除token
-          this.$store.commit('setLoginState', false) // 修改登录状态
-          this.$router.push('/login') // 跳转登录界面
-        })
-        .catch(() => {})
+        removeLocal('token') // 删除token
+        this.$store.commit('setLoginState', false) // 修改登录状态
+        this.$router.push('/login') // 跳转登录界面
+      } catch {}
     },
-    async genderConfirm (value, index) {
+    async updateUserInfo (data) {
+      // 弹出加载中
+      this.$toast.loading()
+      // 提交修改请求
+      await auEdit(data)
+      // 提示修改成功
+      this.$toast.success('资料修改成功')
+      // 异步更新vuex中用户信息
+      this.$store.dispatch('refreshUserInfo')
+    },
+    genderConfirm (value, index) {
       // 关闭底部弹框
       this.showGenderUpdateBox = false
       // 修改用户性别本地数据
       this.userInfo.gender = index
-      // 弹出加载中
-      this.$toast.loading()
-      // 提交修改请求
-      await auEdit({ gender: index })
-      // 提示修改成功
-      this.$toast.success('资料修改成功')
-      // 异步更新vuex中用户信息
-      this.$store.dispatch('refreshUserInfo')
+      // 更新用户数据
+      this.updateUserInfo({ gender: index })
     },
-    async cityConfirm (value, index) {
-      this.userInfo.area = value[1].code
+    cityConfirm (value, index) {
       this.showCity = false
-      // 弹出加载中
-      this.$toast.loading()
-      await auEdit({ area: value[1].code })
-      // 提示修改成功
-      this.$toast.success('资料修改成功')
-      // 异步更新vuex中用户信息
-      this.$store.dispatch('refreshUserInfo')
+      this.userInfo.area = value[1].code
+      // 更新用户数据
+      this.updateUserInfo({ area: value[1].code })
+    },
+    goInfoEdit () {
+      this.$router.push('/home/infoEdit')
     }
   }
 }
 </script>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 .mine-info {
   min-height: 100%;
   .content {

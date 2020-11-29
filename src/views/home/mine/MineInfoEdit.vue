@@ -1,8 +1,5 @@
 <template>
-  <div>
-    发现
-    <router-view></router-view>
-  </div>
+  <CGNavBar path="/home/mineInfo" title="修改昵称" right="保存"></CGNavBar>
 </template>
 
 <script>

@@ -9,6 +9,7 @@ import Question from '@/views/home/question/Question'
 import Find from '@/views/home/find/Find'
 import Mine from '@/views/home/mine/Mine'
 import MineInfo from '@/views/home/mine/MineInfo'
+import MineInfoEdit from '@/views/home/mine/MineInfoEdit'
 import { getLocal } from '@/utils/local.js'
 import { auInfo } from '@/api/mine.js'
 
@@ -62,6 +63,13 @@ const router = new VueRouter({
         {
           path: '/home/mineInfo',
           component: MineInfo,
+          meta: {
+            needLogin: true
+          }
+        },
+        {
+          path: '/home/infoEdit',
+          component: MineInfoEdit,
           meta: {
             needLogin: true
           }
