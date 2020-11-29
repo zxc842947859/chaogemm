@@ -9,12 +9,12 @@
       <i class="iconfont f44">&#xe637;</i>
     </template>
     <template #title>
-      <div class="nav-title">
+      <div class="nav-title" v-if="title">
         {{ title }}
       </div>
     </template>
     <template #right>
-      <div class="right-txt">
+      <div v-if="right" class="right-txt">
         {{ right }}
       </div>
     </template>

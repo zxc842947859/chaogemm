@@ -3,7 +3,7 @@
     <CGNavBar
       path="/home/mineInfo"
       title="修改昵称"
-      right="保存"
+      :right="saveStr"
       :rightEvent="saveNickInfo"
     ></CGNavBar>
     <div class="content">
@@ -18,7 +18,8 @@ import { auEdit } from '@/api/mine.js'
 export default {
   data () {
     return {
-      nickname: ''
+      nickname: '',
+      saveStr: ''
     }
   },
   computed: {
@@ -38,6 +39,11 @@ export default {
       // 异步更新vuex中用户信息
       await this.$store.dispatch('refreshUserInfo')
       this.$router.push('/home/mineInfo')
+    }
+  },
+  watch: {
+    nickname (newVal) {
+      this.saveStr = newVal && newVal !== this.userInfo.nickname ? '保存' : ''
     }
   }
 }
