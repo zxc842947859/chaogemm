@@ -18,6 +18,7 @@
         <MineCell
           title="地区"
           :value="area.city_list[userInfo.area]"
+          @click.native="showCity = true"
         ></MineCell>
         <MineCell title="个人简介" :value="userInfo.intro"></MineCell>
       </div>
@@ -35,8 +36,18 @@
         show-toolbar
         :default-index="userInfo.gender"
         :columns="Object.values(genderObj)"
-        @confirm="onConfirm"
+        @confirm="genderConfirm"
         @cancel="showGenderUpdateBox = false"
+      />
+    </van-popup>
+    <van-popup v-model="showCity" position="bottom">
+      <van-area
+        title="修改地区"
+        :area-list="area"
+        :columns-num="2"
+        :value="userInfo.area"
+        @cancel="showCity = false"
+        @confirm="cityConfirm"
       />
     </van-popup>
   </div>
@@ -63,7 +74,8 @@ export default {
         2: '女'
       },
       area,
-      showGenderUpdateBox: false
+      showGenderUpdateBox: false,
+      showCity: false
     }
   },
   methods: {
@@ -80,7 +92,7 @@ export default {
         })
         .catch(() => {})
     },
-    async onConfirm (value, index) {
+    async genderConfirm (value, index) {
       // 关闭底部弹框
       this.showGenderUpdateBox = false
       // 修改用户性别本地数据
@@ -89,6 +101,17 @@ export default {
       this.$toast.loading()
       // 提交修改请求
       await auEdit({ gender: index })
+      // 提示修改成功
+      this.$toast.success('资料修改成功')
+      // 异步更新vuex中用户信息
+      this.$store.dispatch('refreshUserInfo')
+    },
+    async cityConfirm (value, index) {
+      this.userInfo.area = value[1].code
+      this.showCity = false
+      // 弹出加载中
+      this.$toast.loading()
+      await auEdit({ area: value[1].code })
       // 提示修改成功
       this.$toast.success('资料修改成功')
       // 异步更新vuex中用户信息
