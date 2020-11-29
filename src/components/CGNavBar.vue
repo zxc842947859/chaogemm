@@ -3,7 +3,7 @@
     placeholder
     @click-left="$router.push(path)"
     @click-right="rightEvent"
-    class="nav-bar"
+    class="CGNavBar"
   >
     <template #left>
       <i class="iconfont f44">&#xe637;</i>
@@ -20,16 +20,20 @@
     </template>
   </van-nav-bar></template
 >
-
 <script>
 export default {
-  props: ['title', 'right', 'path', 'rightEvent'],
-  methods: {}
+  name: 'CGNavBar',
+  props: ['title', 'right', 'path'],
+  methods: {
+    rightEvent () {
+      this.$emit('navRightSave')
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
-.nav-bar {
+.CGNavBar {
   &::v-deep .van-nav-bar__left {
     padding-left: 0px;
   }

@@ -2,12 +2,16 @@
   <div class="mine-info-edit">
     <CGNavBar
       path="/home/mineInfo"
-      title="修改昵称"
+      :title="navTitleObj[type]"
       :right="saveStr"
-      :rightEvent="saveNickInfo"
+      @navRightSave="navRightSave"
     ></CGNavBar>
     <div class="content">
-      <van-field v-model="nickname" class="field"></van-field>
+      <van-field
+        v-model="inputValue"
+        class="field"
+        :type="type === 'nickname' ? 'text' : 'textarea'"
+      ></van-field>
     </div>
   </div>
 </template>
@@ -18,22 +22,27 @@ import { auEdit } from '@/api/mine.js'
 export default {
   data () {
     return {
-      nickname: '',
-      saveStr: ''
+      inputValue: '',
+      saveStr: '',
+      type: this.$route.query.type,
+      navTitleObj: {
+        nickname: '修改昵称',
+        intro: '修改个人简介'
+      }
     }
   },
   computed: {
     ...mapState(['userInfo'])
   },
   created () {
-    this.nickname = this.userInfo.nickname
+    this.inputValue = this.userInfo[this.type]
   },
   methods: {
-    async saveNickInfo () {
+    async navRightSave () {
       // 弹出加载中
       this.$toast.loading()
       // 提交修改请求
-      await auEdit({ nickname: this.nickname })
+      await auEdit({ [this.type]: this.inputValue })
       // 提示修改成功
       this.$toast.success('资料修改成功')
       // 异步更新vuex中用户信息
@@ -42,8 +51,8 @@ export default {
     }
   },
   watch: {
-    nickname (newVal) {
-      this.saveStr = newVal && newVal !== this.userInfo.nickname ? '保存' : ''
+    inputValue (newVal) {
+      this.saveStr = newVal && newVal !== this.userInfo[this.type] ? '保存' : ''
     }
   }
 }

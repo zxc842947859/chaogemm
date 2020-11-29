@@ -12,7 +12,7 @@
         <MineCell
           title="昵称"
           :value="userInfo.nickname"
-          @click.native="goInfoEdit"
+          @click.native="$router.push('/home/infoEdit?type=nickname')"
         ></MineCell>
         <MineCell
           title="性别"
@@ -24,7 +24,11 @@
           :value="area.city_list[userInfo.area]"
           @click.native="showCity = true"
         ></MineCell>
-        <MineCell title="个人简介" :value="userInfo.intro"></MineCell>
+        <MineCell
+          title="个人简介"
+          :value="userInfo.intro"
+          @click.native="$router.push('/home/infoEdit?type=intro')"
+        ></MineCell>
       </div>
       <van-button block color="#fff" class="logout" @click="logout">
         <template #default>
@@ -141,10 +145,10 @@ export default {
       this.userInfo.area = value[1].code
       // 更新用户数据
       this.updateUserInfo({ area: value[1].code })
-    },
-    goInfoEdit () {
-      this.$router.push('/home/infoEdit')
     }
+    // goInfoEdit () {
+    //   this.$router.push('/home/infoEdit')
+    // }
   }
 }
 </script>
