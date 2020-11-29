@@ -7,7 +7,7 @@
           <p>{{ userInfo.intro }}</p>
         </div>
         <div class="mine-icon">
-          <img v-if="userInfo.avatar" :src="baseUrl + userInfo.avatar" alt="" />
+          <img v-if="userInfo.avatar" :src="$baseURL + userInfo.avatar" alt="" />
           <img v-else src="@/assets/logo.png" alt="" />
         </div>
       </div>
@@ -111,14 +111,17 @@ export default {
     MineCell
   },
   computed: {
+    // 导入VueX中用户数据 及登录状态
     ...mapState(['userInfo', 'isLogin'])
   },
   data () {
     return {
-      baseUrl: process.env.VUE_APP_URL
+      // 项目基地址
+      // baseUrl: process.env.VUE_APP_URL
     }
   },
   methods: {
+    // 跳转个人信息界面
     goMineInfo () {
       this.$router.push('/home/mineInfo')
     }

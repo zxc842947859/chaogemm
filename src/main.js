@@ -15,6 +15,8 @@ import CGUploadFile from '@/components/CGUploadFile'
 Vue.component('CGNavBar', CGNavBar)
 Vue.component('CGUploadFile', CGUploadFile)
 
+Vue.prototype.$baseURL = process.env.VUE_APP_URL
+
 Vue.use(vant)
 
 Vue.config.productionTip = false

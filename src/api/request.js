@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Toast } from 'vant'
-
-import { removeLocal, getLocal } from '@/utils/local.js'
 import store from '@/store'
 import router from '@/router'
+
+import { removeLocal, getLocal } from '@/utils/local.js'
 
 // 创建axios副本实例对象
 const _fetch = axios.create({

@@ -15,13 +15,8 @@ export default {
   props: ['value'],
   data () {
     return {
-      baseURL: process.env.VUE_APP_URL,
-      fileList: []
+      fileList: [{ url: this.$baseURL + this.value }]
     }
-  },
-  created () {
-    // 原头像
-    this.fileList.push({ url: this.baseURL + this.value })
   },
   methods: {
     // 读取文件前
@@ -41,12 +36,12 @@ export default {
       return isType && isLimit
     },
     // 文件读取后
-    async afterRead (res) {
+    async afterRead (fileRes) {
       // 指定上传组件上传样式
       this.fileList[0].status = 'uploading'
       // 将文件信息包装到formData中
       const formData = new FormData()
-      formData.append('files', res.file)
+      formData.append('files', fileRes.file)
       // 上传
       const res2 = await uploadIcon(formData)
       this.fileList[0].status = 'done'

@@ -3,8 +3,8 @@
     <CGNavBar
       path="/home/mineInfo"
       :title="navTitleObj[type]"
-      :right="saveStr"
-      @navRightSave="navRightSave"
+      :right="navRightTitle"
+      @navRightSave="navRightSaveEvent"
     ></CGNavBar>
     <div class="content">
       <van-field
@@ -25,7 +25,7 @@ export default {
   data () {
     return {
       inputValue: '',
-      saveStr: '',
+      navRightTitle: '',
       type: this.$route.query.type,
       navTitleObj: {
         nickname: '修改昵称',
@@ -43,7 +43,7 @@ export default {
     this.inputValue = this.userInfo[this.type]
   },
   methods: {
-    async navRightSave () {
+    async navRightSaveEvent () {
       // 弹出加载中
       this.$toast.loading()
       // 提交修改请求
@@ -60,7 +60,8 @@ export default {
   watch: {
     // 根据用户是否修改及是否为空 动态显示导航条右上角保存
     inputValue (newVal) {
-      this.saveStr = newVal && newVal !== this.userInfo[this.type] ? '保存' : ''
+      this.navRightTitle =
+        newVal && newVal !== this.userInfo[this.type] ? '保存' : ''
     }
   }
 }

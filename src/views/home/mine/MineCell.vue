@@ -12,7 +12,7 @@
       <img
         class="img"
         v-if="type === 'img' && value"
-        :src="baseURL + value"
+        :src="$baseURL + value"
         alt=""
       />
       <img
@@ -33,7 +33,7 @@ export default {
   props: ['icon', 'title', 'value', 'type'],
   data () {
     return {
-      baseURL: process.env.VUE_APP_URL
+      // baseURL: process.env.VUE_APP_URL
     }
   }
 }

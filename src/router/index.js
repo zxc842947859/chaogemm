@@ -33,15 +33,16 @@ const router = new VueRouter({
         {
           path: '/home/company',
           component: Company,
+          // 路由元信息
           meta: {
-            needTabBar: true
+            needTabBar: true // 是否展示底部标签栏
           }
         },
         {
           path: '/home/question',
           component: Question,
           meta: {
-            needLogin: true,
+            needLogin: true, // 是否需要登录状态
             needTabBar: true
           }
         },
