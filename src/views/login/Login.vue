@@ -86,64 +86,56 @@ export default {
     }
   },
   methods: {
-    getSMSCode () {
-      this.$refs.form
-        .validate('mobile')
-        .then(() => {
-          if (this.send_flag === false) {
-            this.send_flag = true
-            let time = 59
-            this.tip = `${time} 秒`
-            getAuCode({ mobile: this.form.mobile })
-              .then(res => {
-                this.$toast.success(res.data.data)
-                const timerId = setInterval(() => {
-                  if (time > 1) {
-                    time--
-                    this.tip = `${time} 秒`
-                  } else {
-                    clearInterval(timerId)
-                    this.tip = '获取验证码'
-                    this.send_flag = false
-                  }
-                }, 1000)
-              })
-              .catch(error => {
-                console.log(error)
-                this.send_flag = false
+    async getSMSCode () {
+      try {
+        await this.$refs.form.validate('mobile')
+        if (this.send_flag === false) {
+          this.send_flag = true
+          let time = 59
+          this.tip = `${time} 秒`
+          try {
+            const res = await getAuCode({ mobile: this.form.mobile })
+            this.$toast.success(res.data.data)
+            const timerId = setInterval(() => {
+              if (time > 1) {
+                time--
+                this.tip = `${time} 秒`
+              } else {
+                clearInterval(timerId)
                 this.tip = '获取验证码'
-              })
+                this.send_flag = false
+              }
+            }, 1000)
+          } catch {
+            this.send_flag = false
+            this.tip = '获取验证码'
           }
-        })
-        .catch(() => {
-          this.$toast.fail('验证失败')
-        })
+        }
+      } catch {
+        this.$toast.fail('验证失败')
+      }
     },
-    submit () {
-      this.$refs.form
-        .validate()
-        .then(() => {
-          this.$toast.loading('登录加')
-          getAuLogin(this.form)
-            .then(res => {
-              // 存储jwt 授权凭证
-              setLocal('token', res.data.data.jwt)
-              // 存储用户信息
-              this.$store.commit('setUserInfo', res.data.data.user)
-              // 设置为登录状态
-              this.$store.commit('setLoginState', true)
-              this.$toast.clear()
-              this.$router.push(
-                this.$route.query.next ? this.$route.query.next : '/home'
-              )
-            })
-            .catch(error => {
-              console.log(error)
-            })
-        })
-        .catch(() => {
-          this.$toast.success('验证失败')
-        })
+    async submit () {
+      try {
+        await this.$refs.form.validate()
+        this.$toast.loading('登录加')
+        try {
+          const res = await getAuLogin(this.form)
+          // 存储jwt 授权凭证
+          setLocal('token', res.data.data.jwt)
+          // 存储用户信息
+          this.$store.commit('setUserInfo', res.data.data.user)
+          // 设置为登录状态
+          this.$store.commit('setLoginState', true)
+          // 清除弹框
+          this.$toast.clear()
+          this.$router.push(
+            this.$route.query.next ? this.$route.query.next : '/home'
+          )
+        } catch {}
+      } catch {
+        this.$toast.success('验证失败')
+      }
     }
   },
   created () {

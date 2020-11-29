@@ -80,12 +80,19 @@ export default {
         })
         .catch(() => {})
     },
-    onConfirm (value, index) {
+    async onConfirm (value, index) {
+      // 关闭底部弹框
       this.showGenderUpdateBox = false
+      // 修改用户性别本地数据
       this.userInfo.gender = index
-      auEdit({ gender: index }).then(() => {
-        this.$toast.success('修改成功')
-      })
+      // 弹出加载中
+      this.$toast.loading()
+      // 提交修改请求
+      await auEdit({ gender: index })
+      // 提示修改成功
+      this.$toast.success('资料修改成功')
+      // 异步更新vuex中用户信息
+      this.$store.dispatch('refreshUserInfo')
     }
   }
 }
