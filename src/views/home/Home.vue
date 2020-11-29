@@ -64,8 +64,7 @@ export default {
 
 <style lang="less" scoped>
 .home {
-  background: #f6f4f5;
-  min-height: 100%;
+  height: 100%;
   .iconfont {
     font-size: 29px;
   }

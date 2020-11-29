@@ -9,7 +9,11 @@
         type="img"
       ></MineCell>
       <div class="middle">
-        <MineCell title="昵称" :value="userInfo.nickname" @click.native="goInfoEdit"></MineCell>
+        <MineCell
+          title="昵称"
+          :value="userInfo.nickname"
+          @click.native="goInfoEdit"
+        ></MineCell>
         <MineCell
           title="性别"
           :value="genderObj[userInfo.gender]"
@@ -147,7 +151,8 @@ export default {
 
 <style lang="less" scoped>
 .mine-info {
-  min-height: 100%;
+  background: #f6f4f5;
+  height: 100%;
   .content {
     padding: 19px @p15;
     .icon {

@@ -124,6 +124,7 @@ export default {
 <style lang="less" scoped>
 .mine {
   min-height: 100%;
+  background: #f6f4f5;
   .top {
     position: relative;
     // height: 259px;

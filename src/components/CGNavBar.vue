@@ -1,5 +1,10 @@
 <template>
-  <van-nav-bar placeholder @click-left="$router.push(path)" class="nav-bar">
+  <van-nav-bar
+    placeholder
+    @click-left="$router.push(path)"
+    @click-right="rightEvent"
+    class="nav-bar"
+  >
     <template #left>
       <i class="iconfont f44">&#xe637;</i>
     </template>
@@ -18,7 +23,8 @@
 
 <script>
 export default {
-  props: ['title', 'right', 'path']
+  props: ['title', 'right', 'path', 'rightEvent'],
+  methods: {}
 }
 </script>
 

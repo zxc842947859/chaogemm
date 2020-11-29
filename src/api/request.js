@@ -6,7 +6,9 @@ import { removeLocal, getLocal } from '@/utils/local.js'
 import store from '@/store'
 import router from '@/router'
 
+// 创建axios副本实例对象
 const _fetch = axios.create({
+  // 配置请求基地址
   baseURL: process.env.VUE_APP_URL
   //   withCredentials: true
 })
@@ -14,11 +16,12 @@ const _fetch = axios.create({
 // 挂载到vue上
 Vue.prototype.$axios = _fetch
 
+// 请求拦截器
 _fetch.interceptors.request.use(
   config => {
-    if (config.needToken) {
-      config.headers.authorization = `Bearer ${getLocal('token')}`
-    }
+    // 如果本次请求需要token在请求头中加入
+    config.needToken &&
+      (config.headers.authorization = `Bearer ${getLocal('token')}`)
     return config
   },
   error => {
@@ -26,10 +29,13 @@ _fetch.interceptors.request.use(
   }
 )
 
+// 响应拦截器
 _fetch.interceptors.response.use(
   response => {
+    // 如果响应状态码为200 正常响应,正常执行then中回调并能获取到res
     if (response.data.code === 200) {
       return response
+      // 如果状态码为401,403 跳转登录页
     } else if ([401, 403].includes(response.data.code)) {
       // 登录异常处理
       removeLocal('token') // 删除token
@@ -48,4 +54,5 @@ _fetch.interceptors.response.use(
   }
 )
 
+// 导出axios 副本实例对象
 export default _fetch
