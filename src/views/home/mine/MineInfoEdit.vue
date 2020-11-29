@@ -10,7 +10,7 @@
       <van-field
         v-model="inputValue"
         class="field"
-        :type="type === 'nickname' ? 'text' : 'textarea'"
+        :type="type !== 'intro' ? 'text' : 'textarea'"
       ></van-field>
     </div>
   </div>
@@ -27,7 +27,8 @@ export default {
       type: this.$route.query.type,
       navTitleObj: {
         nickname: '修改昵称',
-        intro: '修改个人简介'
+        intro: '修改个人简介',
+        position: '修改职位'
       }
     }
   },
