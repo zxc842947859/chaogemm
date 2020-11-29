@@ -48,7 +48,9 @@ export default {
       this.$toast.success('资料修改成功')
       // 异步更新vuex中用户信息
       await this.$store.dispatch('refreshUserInfo')
-      this.$router.push('/home/mineInfo')
+      this.$router.push(
+        this.type !== 'position' ? '/home/mineInfo' : '/home/mine'
+      )
     }
   },
   watch: {

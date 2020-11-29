@@ -1,5 +1,5 @@
 <template>
-  <div class="mine">
+  <div class="mine" v-cloak>
     <div class="top">
       <div class="top-info" @click="goMineInfo">
         <div class="left-title">
@@ -38,7 +38,12 @@
         </li>
       </ul>
       <div class="i-post">
-        <MineCell icon="&#xe64d;" title="我的岗位" value="产品经理"></MineCell>
+        <MineCell
+          icon="&#xe64d;"
+          title="我的岗位"
+          :value="userInfo.position"
+          @click.native="$router.push('/home/infoEdit?type=position')"
+        ></MineCell>
       </div>
     </div>
     <div class="content">
@@ -127,7 +132,6 @@ export default {
   background: #f6f4f5;
   .top {
     position: relative;
-    // height: 259px;
     padding: 31px @p15 0 @p15;
     background: #ce0031;
     .top-info {

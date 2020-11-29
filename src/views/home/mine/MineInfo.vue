@@ -25,11 +25,6 @@
           @click.native="showCity = true"
         ></MineCell>
         <MineCell
-          title="我的职位"
-          :value="userInfo.position"
-          @click.native="$router.push('/home/infoEdit?type=position')"
-        ></MineCell>
-        <MineCell
           title="个人简介"
           :value="userInfo.intro"
           @click.native="$router.push('/home/infoEdit?type=intro')"

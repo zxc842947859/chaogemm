@@ -18,8 +18,8 @@
         {{ right }}
       </div>
     </template>
-  </van-nav-bar></template
->
+  </van-nav-bar>
+</template>
 <script>
 export default {
   name: 'CGNavBar',
