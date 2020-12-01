@@ -1,5 +1,5 @@
 <template>
-  <van-cell class="find-cell" is-link center :border="false">
+  <van-cell class="find-cell" center :border="false">
     <template #title>
       <div class="title">
         {{ title }}
@@ -9,6 +9,9 @@
       <div class="value">
         查看更多
       </div>
+    </template>
+    <template #right-icon>
+      <i class="iconfont">&#xe653;</i>
     </template>
   </van-cell>
 </template>
@@ -25,7 +28,12 @@ export default {
 
 <style lang="less" scoped>
 .find-cell {
-  padding: 25px 0 0 0;
+  // align-items: center;
+  padding: 25px 15px 0;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+
   .title {
     font-size: 18px;
     font-family: PingFangSC, PingFangSC-Medium;
@@ -43,6 +51,11 @@ export default {
     color: #5b5d75;
     line-height: 20px;
     letter-spacing: 0px;
+  }
+  .iconfont {
+    color: #545671;
+    font-size: 14px;
+    line-height: 20px;
   }
 }
 </style>

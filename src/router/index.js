@@ -82,18 +82,15 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   // 如果不需要登录直接跳转
-  if (!to.meta.needLogin || store.isLogin) {
+  if (!to.meta.needLogin || store.state.isLogin) {
     // 如果需要登录,并且当前是已登录状态,直接跳转
     next()
   } else if (getLocal('token')) {
     // 需要登录,但未登录,判断是否有token,有token获取用户信息
     try {
-      if (!store.state.userInfo) {
-        console.log('xxx', store.userInfo)
-        const res = await auInfo()
-        store.commit('setUserInfo', res.data.data)
-        store.commit('setLoginState', true)
-      }
+      const res = await auInfo()
+      store.commit('setUserInfo', res.data.data)
+      store.commit('setLoginState', true)
       next()
     } catch {}
   } else {

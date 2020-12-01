@@ -1,8 +1,8 @@
 <template>
   <div class="find">
     <CGNavBar title="发现" :left="false"></CGNavBar>
-    <div class="find-content">
-      <FindCell title="面试技巧"></FindCell>
+    <FindCell title="面试技巧"></FindCell>
+    <div class="technic-content">
       <div class="technic">
         <TechnicItem
           v-for="(item, index) in technicList"
@@ -10,6 +10,9 @@
           :info="item"
         ></TechnicItem>
       </div>
+    </div>
+
+    <div class="marked-content">
       <FindCell title="市场数据"></FindCell>
       <div class="marked-data">
         <van-tag class="tag1" color="#eceaea" text-color="#5d5f78">{{
@@ -55,14 +58,19 @@
           </div>
         </div>
       </div>
-      <FindCell title="面经分享"></FindCell>
-      <div class="share-content">
-        <ShareItem
-          v-for="(item, index) in shareList"
-          :key="index"
-          :info="item"
-        ></ShareItem>
-      </div>
+    </div>
+    <FindCell title="面经分享"></FindCell>
+    <div class="share-content">
+      <ShareItem
+        v-for="(item, index) in shareList"
+        :key="index"
+        :info="item"
+      ></ShareItem>
+    </div>
+    <div class="most-bottom">
+      <i class="line"></i>
+      <span class="tip-txt">到底了</span>
+      <i class="line"></i>
     </div>
   </div>
 </template>
@@ -107,12 +115,18 @@ export default {
 
 <style lang="less" scoped>
 .find {
-  .find-content {
-    padding: 0px @p15;
-
+  background-color: #f6f2f3;
+  .technic-content {
+    background-color: #fff;
+    padding: 10px @p15;
+  }
+  .marked-content {
+    background-color: #fff;
+    margin: 10px 0;
     .marked-data {
+      padding: 0px @p15;
       .tag2 {
-        margin: 0px 10px;
+        margin: 20px 10px 10px;
       }
       .chart {
         margin: 9px 0px;
@@ -186,7 +200,7 @@ export default {
         color: #545671;
         line-height: 20px;
         letter-spacing: 0px;
-
+        padding-bottom: 19px;
         .iconfont {
           color: #ababb4;
           font-size: 12px;
@@ -198,6 +212,27 @@ export default {
           transform: rotate(180deg);
         }
       }
+    }
+  }
+  .most-bottom {
+    height: 65px;
+    padding: 0px 68px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .line {
+      border-bottom: 1px solid #eceaea;
+      flex: 1;
+    }
+    .tip-txt {
+      font-size: 14px;
+      font-family: PingFangSC, PingFangSC-Regular;
+      font-weight: 400;
+      text-align: left;
+      color: #b4b4bd;
+      line-height: 20px;
+      letter-spacing: 0px;
+      margin: 0px 19px;
     }
   }
 }

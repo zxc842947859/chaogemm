@@ -39,7 +39,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-
   .title {
     margin-top: 10px;
     font-size: 16px;
