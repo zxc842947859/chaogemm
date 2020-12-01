@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
     <van-tabbar
       inactive-color="#b4b4bd"
       active-color="#e40137"

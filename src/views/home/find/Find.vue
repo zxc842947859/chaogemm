@@ -1,6 +1,6 @@
 <template>
   <div>
-    发现
+    <CGNavBar title="发现" :left="false"></CGNavBar>
     <router-view></router-view>
   </div>
 </template>

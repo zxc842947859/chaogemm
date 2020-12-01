@@ -5,16 +5,16 @@
     @click-right="rightEvent"
     class="CGNavBar"
   >
-    <template #left>
+    <template #left v-if="left">
       <i class="iconfont f44">&#xe637;</i>
     </template>
-    <template #title>
-      <div class="nav-title" v-if="title">
+    <template #title v-if="title">
+      <div class="nav-title">
         {{ title }}
       </div>
     </template>
-    <template #right>
-      <div v-if="right" class="right-txt">
+    <template #right v-if="right">
+      <div class="right-txt">
         {{ right }}
       </div>
     </template>
@@ -23,7 +23,27 @@
 <script>
 export default {
   name: 'CGNavBar',
-  props: ['title', 'right', 'path'],
+
+  // props: ['title', 'right', 'path'],
+  props: {
+    /* 属性名:
+    type: 类型(String, Number, Boolean, undefined, null, Object, Array, Map, Set)  不指定默认支持任意类型, [多个类型用数组包装]
+    default: 默认值,不指定 默认是undefined
+    */
+    title: {
+      type: String
+    },
+    right: {
+      type: String
+    },
+    path: {
+      type: String
+    },
+    left: {
+      type: Boolean,
+      default: true
+    }
+  },
   methods: {
     rightEvent () {
       this.$emit('navRightSave')
