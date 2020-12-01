@@ -1,12 +1,27 @@
 <template>
-  <div>
+  <div class="find">
     <CGNavBar title="发现" :left="false"></CGNavBar>
-    <router-view></router-view>
+    <div class="content">
+      <FindCell title="面试技巧"></FindCell>
+      <FindCell title="市场数据"></FindCell>
+      <FindCell title="面经分享"></FindCell>
+    </div>
   </div>
 </template>
 
 <script>
-export default {}
+import FindCell from './FindCell'
+export default {
+  components: {
+    FindCell
+  }
+}
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.find {
+  .content {
+    padding: 0px @p15;
+  }
+}
+</style>
