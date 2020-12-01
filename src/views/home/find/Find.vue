@@ -23,6 +23,7 @@
             class="chart-item"
             v-for="(item, index) in chartDataHotList.yearSalary"
             :key="index"
+            v-show="index < total"
           >
             <div class="c1">{{ item.year }}</div>
             <div class="c2">
@@ -43,6 +44,17 @@
             </div>
           </li>
         </ul>
+        <div class="look-more">
+          <div
+            @click="total = chartDataHotList.yearSalary.length"
+            v-if="total === 3"
+          >
+            展开更多<i class="iconfont">&#xe652;</i>
+          </div>
+          <div @click="total = 3" v-else>
+            收起<i class="iconfont r180">&#xe652;</i>
+          </div>
+        </div>
       </div>
       <FindCell title="面经分享"></FindCell>
     </div>
@@ -61,7 +73,8 @@ export default {
   data () {
     return {
       technicList: [],
-      chartDataHotList: []
+      chartDataHotList: [],
+      total: 3 // 默认展示几条市场数据
     }
   },
   async created () {
@@ -150,6 +163,27 @@ export default {
             margin-left: 8px;
             width: 30px;
           }
+        }
+      }
+      .look-more {
+        margin-top: 23px;
+        font-size: 14px;
+        font-family: PingFangSC, PingFangSC-Regular;
+        font-weight: 400;
+        text-align: center;
+        color: #545671;
+        line-height: 20px;
+        letter-spacing: 0px;
+
+        .iconfont {
+          color: #ababb4;
+          font-size: 12px;
+          margin-left: 7px;
+        }
+        .r180 {
+          // 行内元素不适用于 transform
+          display: inline-block;
+          transform: rotate(180deg);
         }
       }
     }
