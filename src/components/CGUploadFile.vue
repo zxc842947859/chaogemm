@@ -12,6 +12,7 @@
 <script>
 import { uploadIcon } from '@/api/mine.js'
 export default {
+  name: 'CGUploadFile',
   props: ['value'],
   data () {
     return {

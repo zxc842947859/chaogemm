@@ -9,15 +9,12 @@ import 'normalize.css'
 import '@/style/font/iconfont.css'
 
 import '@/style/main.css'
-import CGNavBar from '@/components/CGNavBar'
-import CGUploadFile from '@/components/CGUploadFile'
-
-Vue.component('CGNavBar', CGNavBar)
-Vue.component('CGUploadFile', CGUploadFile)
+import comm from '@/utils/comm.js'
 
 Vue.prototype.$baseURL = process.env.VUE_APP_URL
 
 Vue.use(vant)
+Vue.use(comm)
 
 Vue.config.productionTip = false
 
