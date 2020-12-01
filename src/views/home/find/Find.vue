@@ -21,9 +21,8 @@
         <ul class="chart">
           <li
             class="chart-item"
-            v-for="(item, index) in chartDataHotList.yearSalary"
+            v-for="(item, index) in chartDataHotList.yearSalary.slice(0, total)"
             :key="index"
-            v-show="index < total"
           >
             <div class="c1">{{ item.year }}</div>
             <div class="c2">
@@ -166,7 +165,7 @@ export default {
         }
       }
       .look-more {
-        margin-top: 23px;
+        margin-top: 20px;
         font-size: 14px;
         font-family: PingFangSC, PingFangSC-Regular;
         font-weight: 400;
