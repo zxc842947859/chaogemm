@@ -90,7 +90,8 @@ export default {
         flex: 1;
       }
       .b3 {
-        margin: 0px 25px 0px 8px;
+        margin: 0px 0px 0px 8px;
+        width: 35px;
       }
       .b4 {
         margin-right: 8px;
