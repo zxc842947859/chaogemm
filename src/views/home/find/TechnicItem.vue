@@ -2,33 +2,40 @@
   <div class="technic-item">
     <div class="left">
       <div class="title van-multi-ellipsis--l2">
-        盘点面试中最为难的五大棘手问题，你是否遇到过？教你如何应对。
+        {{ info.title }}
       </div>
       <div class="bottom">
-        <div class="b1">1小时前</div>
+        <div class="b1">{{ info.created_at }}</div>
         <i class="iconfont b2">&#xe644;</i>
-        <span class="b3">1287</span>
+        <span class="b3">{{ info.read }}</span>
         <i class="iconfont b4">&#xe638;</i>
-        <span class="b5">1287</span>
+        <span class="b5">{{ info.star }}</span>
       </div>
     </div>
-    <img class="right" src="@/assets/logo.png" alt="" />
+    <img v-if="info.cover" class="right" :src="$baseURL + info.cover" alt="" />
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    info: {
+      type: Object
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
 .technic-item {
-  padding: 25px 0px;
+  padding: 19px 0px;
   display: flex;
   justify-content: space-between;
   .left {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    flex: 1;
     .title {
       font-size: 16px;
       font-family: PingFangSC, PingFangSC-Medium;
@@ -64,6 +71,8 @@ export default {}
     width: 113px;
     height: 75px;
     object-fit: cover;
+    border-radius: 4px;
+    margin-left: 15px;
   }
 }
 </style>
