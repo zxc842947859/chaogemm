@@ -1,7 +1,7 @@
 <template>
-  <van-cell class="find-cell" is-link center>
-    <template #title class="title">
-      <div>
+  <van-cell class="find-cell" is-link center :border="false">
+    <template #title>
+      <div class="title">
         {{ title }}
       </div>
     </template>
@@ -25,8 +25,7 @@ export default {
 
 <style lang="less" scoped>
 .find-cell {
-  padding-left: 0;
-  padding-right: 0;
+  padding: 25px 0 0 0;
   .title {
     font-size: 18px;
     font-family: PingFangSC, PingFangSC-Medium;
