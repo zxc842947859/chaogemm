@@ -15,4 +15,12 @@ function chartDataHot () {
   })
 }
 
-export { articlesTechnic, chartDataHot }
+// 面经列表
+function articlesShare (params) {
+  return _fetch({
+    url: '/articles/share',
+    params
+  })
+}
+
+export { articlesTechnic, chartDataHot, articlesShare }

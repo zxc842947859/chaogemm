@@ -18,7 +18,7 @@
         <van-tag class="tag2" color="#eceaea" text-color="#5d5f78">{{
           chartDataHotList.position
         }}</van-tag>
-        <ul class="chart">
+        <ul class="chart" v-if="chartDataHotList.yearSalary">
           <li
             class="chart-item"
             v-for="(item, index) in chartDataHotList.yearSalary.slice(0, total)"
@@ -56,6 +56,13 @@
         </div>
       </div>
       <FindCell title="面经分享"></FindCell>
+      <div class="share-content">
+        <ShareItem
+          v-for="(item, index) in shareList"
+          :key="index"
+          :info="item"
+        ></ShareItem>
+      </div>
     </div>
   </div>
 </template>
@@ -63,17 +70,20 @@
 <script>
 import FindCell from './FindCell'
 import TechnicItem from './TechnicItem'
-import { articlesTechnic, chartDataHot } from '@/api/find.js'
+import ShareItem from './ShareItem'
+import { articlesTechnic, chartDataHot, articlesShare } from '@/api/find.js'
 export default {
   components: {
     FindCell,
-    TechnicItem
+    TechnicItem,
+    ShareItem
   },
   data () {
     return {
       technicList: [],
       chartDataHotList: [],
-      total: 3 // 默认展示几条市场数据
+      total: 3, // 默认展示几条市场数据
+      shareList: []
     }
   },
   async created () {
@@ -87,7 +97,10 @@ export default {
     })
     res2.data.data.yearSalary.reverse()
     this.chartDataHotList = res2.data.data
-    console.log(this.chartDataHotList)
+
+    const res3 = await articlesShare()
+    this.shareList = res3.data.data.list
+    console.log(res3)
   }
 }
 </script>
