@@ -50,7 +50,7 @@
             </div>
           </template>
           <template #default>
-            <div class="clear">
+            <div class="clear" @click="clearHostiry">
               清空
             </div>
           </template>
@@ -74,7 +74,7 @@
 <script>
 import ShareItem from './ShareItem'
 import { articlesShare, articlesShareTopSearch } from '@/api/find.js'
-import { setLocal, getLocal } from '@/utils/local.js'
+import { setLocal, getLocal, removeLocal } from '@/utils/local.js'
 export default {
   components: {
     ShareItem
@@ -144,6 +144,10 @@ export default {
       this.currentPage++
       this.dataList.push(...res.data.data.list)
       this.finished = this.dataList.length >= res.data.data.total
+    },
+    clearHostiry () {
+      removeLocal('history')
+      this.historyList = []
     }
   }
 }
