@@ -81,6 +81,7 @@ import TechnicItem from './TechnicItem'
 import ShareItem from './ShareItem'
 import { articlesTechnic, chartDataHot, articlesShare } from '@/api/find.js'
 export default {
+  name: 'Find',
   components: {
     FindCell,
     TechnicItem,
@@ -95,20 +96,41 @@ export default {
     }
   },
   async created () {
-    const res = await articlesTechnic()
-    this.technicList = res.data.data.list
+    // const res = await articlesTechnic()
+    // this.technicList = res.data.data.list
 
-    const res2 = await chartDataHot()
-    res2.data.data.yearSalary.forEach(item => {
-      item.per = (item.salary / res2.data.data.topSalary) * 100 + '%'
+    // const res2 = await chartDataHot()
+    // res2.data.data.yearSalary.forEach(item => {
+    //   item.per = (item.salary / res2.data.data.topSalary) * 100 + '%'
+    //   item.year = item.year.substring(0, 5)
+    // })
+    // res2.data.data.yearSalary.reverse()
+    // this.chartDataHotList = res2.data.data
+
+    // const res3 = await articlesShare()
+    // this.shareList = res3.data.data.list
+    // 多个请求一次执行
+    let findData = this.$store.state.findData
+    if (findData.length === 0) {
+      findData = await Promise.all([
+        articlesTechnic(),
+        chartDataHot(),
+        articlesShare()
+      ])
+      this.$store.commit('setFindData', findData)
+    }
+    const [technicRes, chartRes, shareRes] = findData
+    // 面试技巧
+    this.technicList = technicRes.data.data.list
+    // 市场数据
+    chartRes.data.data.yearSalary.forEach(item => {
+      item.per = (item.salary / chartRes.data.data.topSalary) * 100 + '%'
       item.year = item.year.substring(0, 5)
     })
-    res2.data.data.yearSalary.reverse()
-    this.chartDataHotList = res2.data.data
-
-    const res3 = await articlesShare()
-    this.shareList = res3.data.data.list
-    console.log(res3)
+    chartRes.data.data.yearSalary.reverse()
+    this.chartDataHotList = chartRes.data.data
+    // 面试分享
+    this.shareList = shareRes.data.data.list
   }
 }
 </script>

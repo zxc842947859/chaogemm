@@ -8,50 +8,75 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   </head>
   <body>
-    <div id="app">{{"2020-12-01T02:22:03.000Z" | formatTime}}</div>
-    <script src="./vue.js"></script>
-    <script>
-      const vm = new Vue({
-        el: '#app',
-        data: {},
-        methods: {},
-        filters: {
-          formatTime (time) {
-            let date1 = moment(time)
+    <!-- <div id="app">{{"2020-12-01T02:22:03.000Z" | formatTime}}</div> -->
 
-            console.log(moment())
-            console.log(date1)
-            console.log(
-              moment(time)
-                .utcOffset(480)
-                .format('YYYY-MM-DD HH:mm:ss')
-            )
-            let _diff = moment().diff(date1, 'S')
-            let result = '刚刚'
-            if (_diff > 60) {
-              _diff = moment().diff(date1, 'm')
-              result = _diff + '分前'
-              if (_diff > 60) {
-                _diff = moment().diff(date1, 'h')
-                result = _diff + '小时前'
-                if (_diff > 24) {
-                  _diff = moment().diff(date1, 'd')
-                  result = _diff + '天前'
-                  if (_diff > 31) {
-                    _diff = moment().diff(date1, 'M')
-                    result = _diff + '月前'
-                    if (_diff > 12) {
-                      _diff = moment().diff(date1, 'Y')
-                      result = _diff + '年前'
-                    }
-                  }
-                }
-              }
-            }
-            return result
-          }
+    <script>
+      // let a = []
+      // let b = ''
+      // let c = {}
+      // a ? console.log('空数组为真') : console.log('空数组为假')
+      // c ? console.log('空对象为真') : console.log('空对象为假')
+      // b ? console.log('空字符串为真') : console.log('空字符串为假')
+      // if ([]) {
+      //   console.log('空数据为值')
+      // }
+
+      let arr = [0, '', [], {}, undefined, null, function () {}, () => {}]
+      const falseArr = []
+      const trueArr = []
+      arr.forEach(item => {
+        // let aa = Object.prototype.toString.call(item)
+        // aa = aa.substring(8, aa.length-1)
+        if (item) {
+          trueArr.push(item)
+        } else {
+          falseArr.push(item)
         }
       })
+      // console.log(trueArr, falseArr);
+
+      var arr1 = [
+        1,
+        1,
+        'true',
+        'true',
+        true,
+        true,
+        15,
+        15,
+        false,
+        false,
+        undefined,
+        undefined,
+        null,
+        null,
+        NaN,
+        NaN,
+        'NaN',
+        0,
+        0,
+        'a',
+        'a',
+        {a: 1},
+        {a: 1},
+        {},
+        [],
+        {},
+        []
+      ]
+      // arr1.entries().forEach((item, index) => {
+      //   console.log(item, index);
+      // })
+      // for (const key in arr.entries()) {
+      //   console.log(key)
+      // }
+      console.log(arr1);
+      const obj = {}
+      const a = Array.from(arr1).filter((item, index, array) => {
+        return obj.hasOwnProperty(typeof item + item) ? false : obj[typeof item + item] = true
+      })
+      console.log(a);
+      console.log(obj);
     </script>
   </body>
 </html>
