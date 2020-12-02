@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     userInfo: '', // 用户信息
     isLogin: false, // 用户是否登录
-    findData: [] // 发面界面数据
+    findData: '' // 发面界面数据
   },
   // 同步处理,也是VueX中修改数据的唯一方式
   mutations: {

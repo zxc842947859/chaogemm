@@ -1,77 +1,82 @@
 <template>
   <div class="find">
-    <CGNavBar title="发现" :left="false"></CGNavBar>
-    <FindCell title="面试技巧"></FindCell>
-    <div class="technic-content">
-      <div class="technic">
-        <TechnicItem
-          v-for="(item, index) in technicList"
-          :key="index"
-          :info="item"
-        ></TechnicItem>
-      </div>
-    </div>
-
-    <div class="marked-content">
-      <FindCell title="市场数据"></FindCell>
-      <div class="marked-data">
-        <van-tag class="tag1" color="#eceaea" text-color="#5d5f78">{{
-          chartDataHotList.city
-        }}</van-tag>
-        <van-tag class="tag2" color="#eceaea" text-color="#5d5f78">{{
-          chartDataHotList.position
-        }}</van-tag>
-        <ul class="chart" v-if="chartDataHotList.yearSalary">
-          <li
-            class="chart-item"
-            v-for="(item, index) in chartDataHotList.yearSalary.slice(0, total)"
+    <van-pull-refresh v-model="loading" @refresh="refresh">
+      <CGNavBar title="发现" :left="false"></CGNavBar>
+      <FindCell title="面试技巧"></FindCell>
+      <div class="technic-content">
+        <div class="technic">
+          <TechnicItem
+            v-for="(item, index) in technicList"
             :key="index"
-          >
-            <div class="c1">{{ item.year }}</div>
-            <div class="c2">
-              <div class="line" :style="{ width: item.per }">
-                ¥ {{ item.salary }}
+            :info="item"
+          ></TechnicItem>
+        </div>
+      </div>
+
+      <div class="marked-content">
+        <FindCell title="市场数据"></FindCell>
+        <div class="marked-data">
+          <van-tag class="tag1" color="#eceaea" text-color="#5d5f78">{{
+            chartDataHotList.city
+          }}</van-tag>
+          <van-tag class="tag2" color="#eceaea" text-color="#5d5f78">{{
+            chartDataHotList.position
+          }}</van-tag>
+          <ul class="chart" v-if="chartDataHotList.yearSalary">
+            <li
+              class="chart-item"
+              v-for="(item, index) in chartDataHotList.yearSalary.slice(
+                0,
+                total
+              )"
+              :key="index"
+            >
+              <div class="c1">{{ item.year }}</div>
+              <div class="c2">
+                <div class="line" :style="{ width: item.per }">
+                  ¥ {{ item.salary }}
+                </div>
               </div>
-            </div>
-            <div class="c3">
-              <div v-if="item.percent !== undefined">
-                <i v-if="item.percent < 0" class="iconfont down">&#xe64e;</i>
-                <i v-else class="iconfont up">&#xe651;</i>
+              <div class="c3">
+                <div v-if="item.percent !== undefined">
+                  <i v-if="item.percent < 0" class="iconfont down">&#xe64e;</i>
+                  <i v-else class="iconfont up">&#xe651;</i>
+                </div>
               </div>
-            </div>
-            <div class="c4">
-              <div v-if="item.percent !== undefined">
-                {{ Math.abs(item.percent) }}%
+              <div class="c4">
+                <div v-if="item.percent !== undefined">
+                  {{ Math.abs(item.percent) }}%
+                </div>
               </div>
+            </li>
+          </ul>
+          <div class="look-more">
+            <div
+              @click="total = chartDataHotList.yearSalary.length"
+              v-if="total === 3"
+            >
+              展开更多<i class="iconfont">&#xe652;</i>
             </div>
-          </li>
-        </ul>
-        <div class="look-more">
-          <div
-            @click="total = chartDataHotList.yearSalary.length"
-            v-if="total === 3"
-          >
-            展开更多<i class="iconfont">&#xe652;</i>
-          </div>
-          <div @click="total = 3" v-else>
-            收起<i class="iconfont r180">&#xe652;</i>
+            <div @click="total = 3" v-else>
+              收起<i class="iconfont r180">&#xe652;</i>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <FindCell title="面经分享"></FindCell>
-    <div class="share-content">
-      <ShareItem
-        v-for="(item, index) in shareList"
-        :key="index"
-        :info="item"
-      ></ShareItem>
-    </div>
-    <div class="most-bottom">
-      <i class="line"></i>
-      <span class="tip-txt">到底了</span>
-      <i class="line"></i>
-    </div>
+      <FindCell title="面经分享"></FindCell>
+      <div class="share-content">
+        <ShareItem
+          v-for="(item, index) in shareList"
+          :key="index"
+          :info="item"
+        ></ShareItem>
+      </div>
+      <div class="most-bottom">
+        <i class="line"></i>
+        <span class="tip-txt">到底了</span>
+        <i class="line"></i>
+      </div>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -92,7 +97,8 @@ export default {
       technicList: [],
       chartDataHotList: [],
       total: 3, // 默认展示几条市场数据
-      shareList: []
+      shareList: [],
+      loading: false // 是否正在下拉刷新中
     }
   },
   async created () {
@@ -110,27 +116,42 @@ export default {
     // const res3 = await articlesShare()
     // this.shareList = res3.data.data.list
     // 多个请求一次执行
-    let findData = this.$store.state.findData
-    if (findData.length === 0) {
-      findData = await Promise.all([
-        articlesTechnic(),
-        chartDataHot(),
-        articlesShare()
-      ])
-      this.$store.commit('setFindData', findData)
+    const findData = this.$store.state.findData
+    this.loadData(findData)
+  },
+  methods: {
+    // 下拉刷新
+    refresh () {
+      this.loadData()
+      setTimeout(() => {
+        this.loading = false
+      }, 2000)
+    },
+    // 加载数据
+    async loadData (findData) {
+      // 如果没有缓存就发请求获取
+      if (!findData) {
+        findData = await Promise.all([
+          articlesTechnic(),
+          chartDataHot(),
+          articlesShare()
+        ])
+        // 存储到vuex中
+        this.$store.commit('setFindData', findData)
+      }
+      const [technicRes, chartRes, shareRes] = findData
+      // 面试技巧
+      this.technicList = technicRes.data.data.list
+      // 市场数据
+      chartRes.data.data.yearSalary.forEach(item => {
+        item.per = (item.salary / chartRes.data.data.topSalary) * 100 + '%'
+        item.year = item.year.substring(0, 5)
+      })
+      chartRes.data.data.yearSalary.reverse()
+      this.chartDataHotList = chartRes.data.data
+      // 面试分享
+      this.shareList = shareRes.data.data.list
     }
-    const [technicRes, chartRes, shareRes] = findData
-    // 面试技巧
-    this.technicList = technicRes.data.data.list
-    // 市场数据
-    chartRes.data.data.yearSalary.forEach(item => {
-      item.per = (item.salary / chartRes.data.data.topSalary) * 100 + '%'
-      item.year = item.year.substring(0, 5)
-    })
-    chartRes.data.data.yearSalary.reverse()
-    this.chartDataHotList = chartRes.data.data
-    // 面试分享
-    this.shareList = shareRes.data.data.list
   }
 }
 </script>
