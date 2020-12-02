@@ -9,6 +9,7 @@
         @cancel="cancelEvent"
       ></van-search>
       <van-list
+        v-if="reset"
         v-model="loading"
         :finished="finished"
         @load="onLoad"
@@ -36,16 +37,34 @@ export default {
   data () {
     return {
       searchValue: '',
-      loading: false,  // 是否在加载中
-      finished: false,  // 是否已加载完成
-      dataList: [],  // 数据
-      currentPage: 0,  // 当前第几页
-      pageSize: 2  // 
+      loading: false, // 是否在加载中
+      finished: false, // 是否已加载完成
+      dataList: [], // 数据
+      currentPage: 0, // 当前第几页
+      pageSize: 2, //
+      reset: true
     }
   },
   methods: {
-    searchEvent () {},
-    cancelEvent () {},
+    resetState () {
+      this.loading = false
+      this.finished = false
+      this.dataList = []
+      this.currentPage = 0
+      this.reset = false
+      this.$nextTick(() => {
+        this.reset = true
+      })
+      //   setTimeout(() => {
+      //     this.reset = true
+      //   }, 0)
+    },
+    searchEvent () {
+      this.resetState()
+    },
+    cancelEvent () {
+      this.resetState()
+    },
     async onLoad () {
       const res = await articlesShare({
         start: this.currentPage * this.pageSize,
