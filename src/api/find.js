@@ -23,4 +23,11 @@ function articlesShare (params) {
   })
 }
 
-export { articlesTechnic, chartDataHot, articlesShare }
+// 面经搜索
+function articlesShareTopSearch () {
+  return _fetch({
+    url: '/articles/shareTopSearch'
+  })
+}
+
+export { articlesTechnic, chartDataHot, articlesShare, articlesShareTopSearch }
