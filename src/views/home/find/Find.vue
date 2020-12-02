@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      <FindCell title="面经分享"></FindCell>
+      <FindCell title="面经分享" @click.native="$router.push('/home/shareList')"></FindCell>
       <div class="share-content">
         <ShareItem
           v-for="(item, index) in shareList"

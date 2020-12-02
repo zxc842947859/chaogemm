@@ -10,6 +10,7 @@ import Find from '@/views/home/find/Find'
 import Mine from '@/views/home/mine/Mine'
 import MineInfo from '@/views/home/mine/MineInfo'
 import MineInfoEdit from '@/views/home/mine/MineInfoEdit'
+import ShareList from '@/views/home/find/ShareList'
 import { getLocal } from '@/utils/local.js'
 import { auInfo } from '@/api/mine.js'
 
@@ -74,6 +75,11 @@ const router = new VueRouter({
           meta: {
             needLogin: true
           }
+        },
+        {
+          path: '/home/shareList',
+          component: ShareList,
+          meta: {}
         }
       ]
     }
