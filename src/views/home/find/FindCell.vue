@@ -6,7 +6,7 @@
       </div>
     </template>
     <template #default>
-      <div class="value">
+      <div class="value" @click="loadMore">
         查看更多
       </div>
     </template>
@@ -21,6 +21,11 @@ export default {
   props: {
     title: {
       type: String
+    }
+  },
+  methods: {
+    loadMore () {
+      this.$emit('loadMore')
     }
   }
 }

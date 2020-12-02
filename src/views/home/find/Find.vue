@@ -2,7 +2,10 @@
   <div class="find">
     <van-pull-refresh v-model="loading" @refresh="refresh">
       <CGNavBar title="发现" :left="false"></CGNavBar>
-      <FindCell title="面试技巧"></FindCell>
+      <FindCell
+        title="面试技巧"
+        @loadMore="$router.push('/home/technicList')"
+      ></FindCell>
       <div class="technic-content">
         <div class="technic">
           <TechnicItem
@@ -65,7 +68,7 @@
       </div>
       <FindCell
         title="面经分享"
-        @click.native="$router.push('/home/shareList')"
+        @loadMore="$router.push('/home/shareList')"
       ></FindCell>
       <div class="share-content">
         <ShareItem
