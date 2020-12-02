@@ -57,7 +57,8 @@ export default {
 
 <style lang="less" scoped>
 .technic-item {
-  padding: 19px 0px;
+  background-color: #fff;
+  padding: 19px @p15;
   display: flex;
   justify-content: space-between;
   .left {
