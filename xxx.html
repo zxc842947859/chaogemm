@@ -4,79 +4,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vant@2.10/lib/index.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vant@2.10/lib/vant.min.js"></script>
   </head>
   <body>
-    <!-- <div id="app">{{"2020-12-01T02:22:03.000Z" | formatTime}}</div> -->
-
+    <div id="app">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="load"
+      >
+        <van-cell
+          v-for="(item, index) in list"
+          :key="index"
+          :title="item"
+        ></van-cell>
+      </van-list>
+    </div>
     <script>
-      // let a = []
-      // let b = ''
-      // let c = {}
-      // a ? console.log('空数组为真') : console.log('空数组为假')
-      // c ? console.log('空对象为真') : console.log('空对象为假')
-      // b ? console.log('空字符串为真') : console.log('空字符串为假')
-      // if ([]) {
-      //   console.log('空数据为值')
-      // }
+      const vm = new Vue({
+        el: '#app',
+        data: {
+          list: [],
+          loading: false,
+          finished: false
+        },
+        methods: {
+          // load () {
+          //   setTimeout(() => {
+          //     this.list.push(Math.ceil(Math.random() * 999))
+          //     this.loading = false
+          //   }, 1000)
+          // }
 
-      let arr = [0, '', [], {}, undefined, null, function () {}, () => {}]
-      const falseArr = []
-      const trueArr = []
-      arr.forEach(item => {
-        // let aa = Object.prototype.toString.call(item)
-        // aa = aa.substring(8, aa.length-1)
-        if (item) {
-          trueArr.push(item)
-        } else {
-          falseArr.push(item)
+          load () {
+            setTimeout(() => {
+              this.list.push(Math.random() * 999)
+              this.loading = false
+              // 是否加载完成的判断
+              if (this.list.length >= 5) {
+                this.finished = true
+              }
+            }, 1000)
+          }
         }
       })
-      // console.log(trueArr, falseArr);
-
-      var arr1 = [
-        1,
-        1,
-        'true',
-        'true',
-        true,
-        true,
-        15,
-        15,
-        false,
-        false,
-        undefined,
-        undefined,
-        null,
-        null,
-        NaN,
-        NaN,
-        'NaN',
-        0,
-        0,
-        'a',
-        'a',
-        {a: 1},
-        {a: 1},
-        {},
-        [],
-        {},
-        []
-      ]
-      // arr1.entries().forEach((item, index) => {
-      //   console.log(item, index);
-      // })
-      // for (const key in arr.entries()) {
-      //   console.log(key)
-      // }
-      console.log(arr1);
-      const obj = {}
-      const a = Array.from(arr1).filter((item, index, array) => {
-        return obj.hasOwnProperty(typeof item + item) ? false : obj[typeof item + item] = true
-      })
-      console.log(a);
-      console.log(obj);
     </script>
   </body>
 </html>
