@@ -30,4 +30,17 @@ function articlesShareTopSearch () {
   })
 }
 
-export { articlesTechnic, chartDataHot, articlesShare, articlesShareTopSearch }
+// 面试技巧搜索
+function articlesTechnicTopSearch () {
+  return _fetch({
+    url: '/articles/technicTopSearch'
+  })
+}
+
+export {
+  articlesTechnic,
+  chartDataHot,
+  articlesShare,
+  articlesShareTopSearch,
+  articlesTechnicTopSearch
+}
