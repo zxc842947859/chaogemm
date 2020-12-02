@@ -5,7 +5,7 @@
       <van-search
         shape="round"
         placeholder="请输入关键字"
-        v-model="searchValue"
+        v-model.trim="searchValue"
         :show-action="!showList || !!searchValue"
         @search="searchEvent"
         @cancel="cancelEvent"
@@ -79,6 +79,14 @@ export default {
   components: {
     ShareItem
   },
+  watch: {
+    searchValue (newVal) {
+      // 当用户清空搜索输入框时,重新获取数据
+      if (!newVal) {
+        this.resetState()
+      }
+    }
+  },
   data () {
     return {
       showList: true,
@@ -112,19 +120,21 @@ export default {
     },
     searchEvent () {
       this.resetState()
-      const searchStr = this.searchValue.trim()
-      if (searchStr) {
-        this.historyList.unshift(searchStr)
+      //   const searchStr = this.searchValue.trim()
+      if (this.searchValue) {
+        this.historyList.unshift(this.searchValue)
         this.historyList = [...new Set(this.historyList)].slice(0, 5)
         setLocal('history', JSON.stringify(this.historyList))
       }
     },
     async cancelEvent () {
       //   this.resetState()
+      // 动态展示列表及大家都在搜界面
       this.showList = !this.showList
       if (this.showList) {
-        this.resetState()
+        this.resetState() // 展示面经列表
       } else {
+        // 展示大家都在搜 获取缓存的数据,没有缓存就发请求获取并缓存
         let host = this.$store.state.hotList
         if (host.length === 0) {
           host = await articlesShareTopSearch()
@@ -135,6 +145,7 @@ export default {
       }
     },
     async onLoad () {
+      // 上拉加载更多
       const res = await articlesShare({
         start: this.currentPage * this.pageSize,
         limit: this.pageSize,
@@ -142,9 +153,21 @@ export default {
       })
       this.loading = false
       this.currentPage++
+      if (this.searchValue) {
+        res.data.data.list.forEach(item => {
+          // 以当前搜索关键字来分割标题
+          const _titles = item.title.split(this.searchValue)
+          // 给本次搜索关键字 在文章标题中拼接富文本样式
+          item.title = _titles.join(
+            `<span style="color:red;">${this.searchValue}</span>`
+          )
+        })
+      }
+      // 追加新数据
       this.dataList.push(...res.data.data.list)
       this.finished = this.dataList.length >= res.data.data.total
     },
+    // 清除历史搜索
     clearHostiry () {
       removeLocal('history')
       this.historyList = []

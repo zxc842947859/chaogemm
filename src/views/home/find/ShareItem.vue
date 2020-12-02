@@ -1,6 +1,6 @@
 <template>
   <van-cell class="share-item">
-    <div class="title">{{ info.title }}</div>
+    <div class="title" v-html="info.title"></div>
     <div class="content van-multi-ellipsis--l2">
       {{ info.content }}
     </div>
