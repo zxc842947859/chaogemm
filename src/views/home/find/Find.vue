@@ -63,7 +63,10 @@
           </div>
         </div>
       </div>
-      <FindCell title="面经分享" @click.native="$router.push('/home/shareList')"></FindCell>
+      <FindCell
+        title="面经分享"
+        @click.native="$router.push('/home/shareList')"
+      ></FindCell>
       <div class="share-content">
         <ShareItem
           v-for="(item, index) in shareList"
@@ -130,7 +133,7 @@ export default {
     // 加载数据
     async loadData (findData) {
       // 如果没有缓存就发请求获取
-      if (!findData) {
+      if (findData.length === 0) {
         findData = await Promise.all([
           articlesTechnic(),
           chartDataHot(),
@@ -151,7 +154,14 @@ export default {
       this.chartDataHotList = chartRes.data.data
       // 面试分享
       this.shareList = shareRes.data.data.list
+
+      this.$nextTick(() => {
+        window.scrollTo(0, this.$route.meta.top || 0)
+      })
     }
+  },
+  activated () {
+    window.scrollTo(0, this.$route.meta.top || 0)
   }
 }
 </script>

@@ -86,7 +86,13 @@ const router = new VueRouter({
   ]
 })
 
+// 前置守卫
 router.beforeEach(async (to, from, next) => {
+  // 记录每个页面离开前滚动条的位置,存储到路由元中
+  from.meta.top =
+    document.documentElement.scrollTop ||
+    document.body.scrollTop ||
+    window.pageYOffset
   // 如果不需要登录直接跳转
   if (!to.meta.needLogin || store.state.isLogin) {
     // 如果需要登录,并且当前是已登录状态,直接跳转
@@ -104,5 +110,15 @@ router.beforeEach(async (to, from, next) => {
     router.push('/login?next=' + to.fullPath)
   }
 })
+
+// 后置守卫
+router.afterEach((to, from) => {
+  window.scrollTo(0, 0)
+})
+
+const originalReplace = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return originalReplace.call(this, location).catch(err => err)
+}
 
 export default router

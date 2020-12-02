@@ -19,7 +19,7 @@
           v-model="loading"
           :finished="finished"
           @load="onLoad"
-          finished-text="到底了"
+          finished-text="---- 到底了 ---"
         >
           <div class="list">
             <ShareItem
@@ -82,7 +82,7 @@ export default {
   watch: {
     searchValue (newVal) {
       // 当用户清空搜索输入框时,重新获取数据
-      if (!newVal) {
+      if (!newVal && this.showList) {
         this.resetState()
       }
     }
@@ -178,14 +178,24 @@ export default {
 
 <style lang="less" scoped>
 .share-list {
+  background-color: #f6f2f3;
   .share-content {
-    padding: 0px @p15;
     .van-search {
-      padding-left: 0px;
-      padding-right: 0px;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+    .content {
+      //   padding: 0px @p15;
+      .list {
+        background-color: #fff;
+        padding: 0;
+      }
     }
   }
   .hot-search {
+    background-color: #fff;
+    padding-top: 10px;
+    padding: 10px @p15;
     .title {
       font-size: 18px;
       font-family: PingFangSC, PingFangSC-Medium;
