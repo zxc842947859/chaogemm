@@ -1,10 +1,11 @@
 import _fetch from './request.js'
 
 // 获取用户信息
-function auInfo () {
+function auInfo (bol = false) {
   return _fetch({
     url: '/au/info',
-    needToken: true
+    needToken: true,
+    noError: bol // true: 不希望处理错误
   })
 }
 

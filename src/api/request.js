@@ -35,12 +35,22 @@ _fetch.interceptors.response.use(
     // 如果响应状态码为200 正常响应,正常执行then中回调并能获取到res
     if (response.data.code === 200) {
       return response
+      // 有些接口我们不需要处理错误
+    } else if (response.config.noError) {
+      // 删除token
+      removeLocal('token')
+      // 中止.then
+      return Promise.reject(new Error(response.data.message))
       // 如果状态码为401,403 跳转登录页
     } else if ([401, 403].includes(response.data.code)) {
+      console.log(response)
       // 登录异常处理
       removeLocal('token') // 删除token
       store.commit('setLoginState', false) // 修改登录状态
-      router.push('/login') // 跳转登录界面
+      router.push(
+        '/login' +
+          (response.config.fullPath ? `?next=${response.config.fullPath}` : '')
+      ) // 跳转登录界面
       // 结束then执行
       Toast.fail(response.data.message)
       return Promise.reject(new Error(response.data.message))

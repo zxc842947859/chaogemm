@@ -184,21 +184,30 @@ export default {
     // 发送评论
     async sendEvent () {
       if (this.commentStr) {
-        const res = await articlesComments({
-          content: this.commentStr,
-          article: this.id,
-          parent: this.parent
-        })
-        // 如果是回复
-        if (this.parent) {
-          // 把回复的内容添加到当前回复列表中
-          this.parentObj.children_comments.push(res.data.data)
-        } else {
-          // 发送的新评论插入到最前面
-          this.commentList.unshift(res.data.data)
+        try {
+          const res = await articlesComments(
+            {
+              content: this.commentStr,
+              article: this.id,
+              parent: this.parent
+            },
+            this.$route.fullPath
+          )
+          // 如果是回复
+          if (this.parent) {
+            // 把回复的内容添加到当前回复列表中
+            this.parentObj.children_comments.push(res.data.data)
+            this.$toast.success('回复成功')
+          } else {
+            // 发送的新评论插入到最前面
+            this.commentList.unshift(res.data.data)
+            this.$toast.success('评论成功')
+          }
+          // 关闭评论框
+          this.show = false
+        } catch (error) {
+          this.$toast.fail('评论失败,请登录!')
         }
-        // 关闭评论框
-        this.show = false
       }
     },
     // 评论框默认聚焦

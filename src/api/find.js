@@ -60,12 +60,13 @@ function articlesCommentsId (id, params) {
 }
 
 // 发表评论
-function articlesComments (data) {
+function articlesComments (data, fullPath) {
   return _fetch({
     url: '/articles/comments',
     method: 'post',
     needToken: true,
-    data
+    data,
+    fullPath
   })
 }
 export {
