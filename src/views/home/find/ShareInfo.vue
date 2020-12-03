@@ -99,7 +99,12 @@
           </div>
         </div>
       </div>
-      <van-popup v-model="show" position="bottom" @open="showPopover">
+      <van-popup
+        v-model="show"
+        position="bottom"
+        @open="showPopover"
+        @close="closePopup"
+      >
         <van-field
           v-model.trim="commentStr"
           ref="send"
@@ -150,13 +155,18 @@ export default {
       sendCommentPlaceStr: '我来补充两句'
     }
   },
-  watch: {
-    show () {
+  // watch: {
+  //   show () {
+  //     // 清空评论框中的内容
+  //     this.commentStr = ''
+  //   }
+  // },
+  methods: {
+    // 关闭弹层时清空评论输入框中内容
+    closePopup () {
       // 清空评论框中的内容
       this.commentStr = ''
-    }
-  },
-  methods: {
+    },
     // 点击发布评论输入框
     sendComment () {
       this.show = true
