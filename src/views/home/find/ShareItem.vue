@@ -1,5 +1,5 @@
 <template>
-  <van-cell class="share-item">
+  <van-cell class="share-item" @click="goInfo">
     <div class="title" v-html="info.title"></div>
     <div class="content van-multi-ellipsis--l2">
       {{ info.content }}
@@ -29,6 +29,13 @@ export default {
   props: {
     info: {
       type: Object
+    }
+  },
+  methods: {
+    goInfo () {
+      this.$router.push(
+        '/home/shareInfo/' + this.info.id + '?rePath=' + this.$route.fullPath
+      )
     }
   }
 }
