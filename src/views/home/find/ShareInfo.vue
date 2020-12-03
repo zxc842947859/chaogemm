@@ -20,7 +20,6 @@
         <p class="article-content" v-html="infoData.content"></p>
       </div>
       <div class="space"></div>
-
       <van-list
         class="van-list"
         v-model="listLoading"
@@ -80,6 +79,21 @@
           </div>
         </div>
       </van-list>
+      <div class="send-coment-bar">
+        <div class="sendbox">我来补充两句</div>
+        <div class="b1 icon-box">
+          <i class="iconfont">&#xe63c;</i>
+          <span class="num">{{ infoData.read }}</span>
+        </div>
+        <div class="b2 icon-box">
+          <i class="iconfont">&#xe638;</i>
+          <span class="num">{{ infoData.star }}</span>
+        </div>
+        <div class="b3 icon-box">
+          <i class="iconfont">&#xe63e;</i>
+          <span class="num">{{ infoData.share }}</span>
+        </div>
+      </div>
     </van-skeleton>
   </div>
 </template>
@@ -89,19 +103,20 @@ import { articlesShareId, articlesCommentsId } from '@/api/find.js'
 export default {
   data () {
     return {
-      id: this.$route.params.id,
-      backPath: this.$route.query.backPath,
-      infoData: '',
-      loading: true,
-      listLoading: false,
-      finished: false,
+      id: this.$route.params.id, // 文章id
+      backPath: this.$route.query.backPath, // 返回url
+      infoData: '', // 文章详情
+      loading: true, // 是否显示骨架
+      listLoading: false, // 是否正在上拉加载中
+      finished: false, // 是否上拉加载完成
       currentPage: 0,
       pageSize: 3,
-      commentList: [],
-      total: 0
+      commentList: [], // 评论数据
+      total: 0 // 评论条数
     }
   },
   methods: {
+    // 加载评论数据
     async onLoadComment () {
       const res = await articlesCommentsId(this.id, {
         start: this.currentPage * this.pageSize,
@@ -114,9 +129,11 @@ export default {
       this.finished = this.commentList.length >= this.total
     }
   },
+  // 加载文章详情
   async created () {
     const res = await articlesShareId(this.id)
     this.loading = false
+    console.log(res)
     this.infoData = res.data.data
   }
 }
@@ -329,6 +346,52 @@ export default {
             }
           }
         }
+      }
+    }
+  }
+  .send-coment-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 65px;
+    padding: 8px @p15 14px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* x偏移量 | y偏移量 | 阴影模糊半径 | 阴影扩散半径 | 阴影颜色 */
+    box-shadow: 0px -1px 2px 1px #f6f2f377;
+
+    .sendbox {
+      width: 189px;
+      height: 34px;
+      background: #f6f2f3;
+      padding: 7px 10px;
+      font-size: 14px;
+      font-family: PingFangSC, PingFangSC-Regular;
+      font-weight: 400;
+      text-align: left;
+      color: #b4b4bd;
+      line-height: 20px;
+      letter-spacing: 0px;
+      border-radius: 4px;
+    }
+    .icon-box {
+      font-size: 12px;
+      font-family: PingFangSC, PingFangSC-Regular;
+      font-weight: 400;
+      text-align: left;
+      color: #b4b4bd;
+      line-height: 17px;
+      letter-spacing: 0px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      .iconfont {
+        font-size: 25px;
+        margin-bottom: 4px;
       }
     }
   }
