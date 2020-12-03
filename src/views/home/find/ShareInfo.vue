@@ -62,7 +62,7 @@
                   <i class="iconfont">&#xe638;</i>
                 </div>
               </div>
-              <div class="comment-item-content">
+              <div class="comment-item-content" @click="replayComment(item)">
                 {{ item.content }}
               </div>
               <div
@@ -84,7 +84,7 @@
       </van-list>
       <div style="height:65px">
         <div class="send-coment-bar">
-          <div class="sendbox" @click="show = true">我来补充两句</div>
+          <div class="sendbox" @click="sendComment">我来补充两句</div>
           <div class="b1 icon-box">
             <i class="iconfont">&#xe63c;</i>
             <span class="num">{{ infoData.read }}</span>
@@ -107,12 +107,12 @@
           class="send-content"
           type="textarea"
           row="5"
-          placeholder="我来补充两句"
+          :placeholder="sendCommentPlaceStr"
         ></van-field>
         <div class="send-box">
           <div class="pl"></div>
           <div
-            @click="sendComment"
+            @click="sendEvent"
             class="send-btn"
             :style="{ color: commentStr ? 'red' : '#b4b4bd' }"
           >
@@ -145,26 +145,48 @@ export default {
       total: 0, // 评论条数
       show: false,
       commentStr: '', // 评论内容
-      parent: '' // 为空时发送评论,否则回复评论
+      parent: '', // 为空时发送评论,否则回复评论
+      parentObj: '',
+      sendCommentPlaceStr: '我来补充两句'
     }
   },
-  // watch: {
-  //   commentStr (newVal) {
-  //     if (newVal) {
-  //     }
-  //   }
-  // },
+  watch: {
+    show () {
+      // 清空评论框中的内容
+      this.commentStr = ''
+    }
+  },
   methods: {
+    // 点击发布评论输入框
+    sendComment () {
+      this.show = true
+      // 发表评论时让它为空表示发表评论
+      this.parent = ''
+      this.sendCommentPlaceStr = '我来补充两句'
+    },
+    // 回复评论
+    replayComment (item) {
+      this.show = true
+      this.parent = item.id
+      this.parentObj = item
+      this.sendCommentPlaceStr = `回复: ${this.parentObj.author.nickname}`
+    },
     // 发送评论
-    async sendComment () {
+    async sendEvent () {
       if (this.commentStr) {
         const res = await articlesComments({
           content: this.commentStr,
           article: this.id,
           parent: this.parent
         })
-        // 发送的新评论插入到最前面
-        this.commentList.unshift(res.data.data)
+        // 如果是回复
+        if (this.parent) {
+          // 把回复的内容添加到当前回复列表中
+          this.parentObj.children_comments.push(res.data.data)
+        } else {
+          // 发送的新评论插入到最前面
+          this.commentList.unshift(res.data.data)
+        }
         // 关闭评论框
         this.show = false
       }
