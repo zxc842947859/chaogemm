@@ -44,7 +44,7 @@
                 :src="$baseURL + item.author.avatar"
                 alt=""
               />
-              <img v-else class="icon" src="@/assets/avantar.png" alt="" />
+              <img v-else class="icon" src="@/assets/avatar.png" alt="" />
             </div>
             <div class="comment-rt">
               <div class="comment-user-info">
@@ -105,7 +105,6 @@ export default {
       this.currentPage++
       this.listLoading = false
       this.total = res.data.data.total
-      console.log(res)
       this.finished = this.commentList.length >= this.total
     }
   },

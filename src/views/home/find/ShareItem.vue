@@ -34,7 +34,7 @@ export default {
   methods: {
     goInfo () {
       this.$router.push(
-        '/home/shareInfo/' + this.info.id + '?rePath=' + this.$route.fullPath
+        '/home/shareInfo/' + this.info.id + '?backPath=' + this.$route.fullPath
       )
     }
   }

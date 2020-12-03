@@ -44,6 +44,13 @@ function articlesTechnicInfo (id) {
   })
 }
 
+// 面经详情
+function articlesShareId (id) {
+  return _fetch({
+    url: `/articles/share/${id}`
+  })
+}
+
 // 获取面经评论
 function articlesCommentsId (id, params) {
   return _fetch({
@@ -59,5 +66,6 @@ export {
   articlesShareTopSearch,
   articlesTechnicTopSearch,
   articlesTechnicInfo,
-  articlesCommentsId
+  articlesCommentsId,
+  articlesShareId
 }
