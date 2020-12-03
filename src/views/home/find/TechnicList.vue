@@ -4,7 +4,7 @@
     <van-search
       shape="round"
       :show-action="!!searchKeyWord"
-      v-model="searchKeyWord"
+      v-model.trim="searchKeyWord"
       clear-trigger="always"
       :input-align="bol || !!searchKeyWord ? 'left' : 'center'"
       :placeholder="bol ? '' : '请输入关键字'"
@@ -65,14 +65,21 @@
             </div>
           </template>
           <template #default>
-            <div class="value">
+            <div class="value" @click="clearAll">
               清空
             </div>
           </template>
         </van-cell>
         <div class="tag-list">
-          <van-tag size="large" class="tag" color="#f7f4f5" text-color="#65667f"
-            >产面面试</van-tag
+          <van-tag
+            v-for="(item, index) in hostiryList"
+            :key="index"
+            size="large"
+            class="tag"
+            color="#f7f4f5"
+            text-color="#65667f"
+            @click="hotClick(item)"
+            >{{ item }}</van-tag
           >
         </div>
       </div>
@@ -83,7 +90,7 @@
 <script>
 import TechnicItem from './TechnicItem'
 import { articlesTechnic, articlesTechnicTopSearch } from '@/api/find.js'
-
+import { setLocal, getLocal, removeLocal } from '@/utils/local.js'
 export default {
   components: { TechnicItem },
   data () {
@@ -98,7 +105,8 @@ export default {
       currentPage: 0,
       pageSize: 2,
       dataList: [],
-      hotList: []
+      hotList: [],
+      hostiryList: JSON.parse(getLocal('teHositryList')) || []
     }
   },
   methods: {
@@ -117,6 +125,13 @@ export default {
       console.log(kw)
       this.searchKeyWord = kw
       this.resetState()
+      this.searchHistoryHandler()
+    },
+    searchHistoryHandler () {
+      this.hostiryList.unshift(this.searchKeyWord)
+      this.hostiryList = [...new Set(this.hostiryList)]
+      this.hostiryList.splice(5)
+      setLocal('teHositryList', JSON.stringify(this.hostiryList))
     },
     focusEvent () {
       this.bol = true
@@ -126,7 +141,8 @@ export default {
       this.bol = false
     },
     searchEvent () {
-      this.onLoad()
+      this.resetState()
+      this.searchHistoryHandler()
     },
     cancelEvent () {
       this.resetState()
@@ -141,6 +157,10 @@ export default {
       this.$nextTick(() => {
         this.reset = true
       })
+    },
+    clearAll () {
+      this.hostiryList = []
+      removeLocal('teHositryList')
     }
   },
   async created () {
@@ -169,8 +189,7 @@ export default {
       }
     }
   }
-  .list-content {
-  }
+
   .search-box {
     background-color: #fff;
     height: 100%;
