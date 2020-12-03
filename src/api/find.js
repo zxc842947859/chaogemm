@@ -44,11 +44,20 @@ function articlesTechnicInfo (id) {
   })
 }
 
+// 获取面经评论
+function articlesCommentsId (id, params) {
+  return _fetch({
+    url: `/articles/comments/${id}`,
+    params
+  })
+}
+
 export {
   articlesTechnic,
   chartDataHot,
   articlesShare,
   articlesShareTopSearch,
   articlesTechnicTopSearch,
-  articlesTechnicInfo
+  articlesTechnicInfo,
+  articlesCommentsId
 }
