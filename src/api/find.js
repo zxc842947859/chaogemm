@@ -37,10 +37,18 @@ function articlesTechnicTopSearch () {
   })
 }
 
+// 面试技巧详情
+function articlesTechnicInfo (id) {
+  return _fetch({
+    url: `/articles/technic/${id}`
+  })
+}
+
 export {
   articlesTechnic,
   chartDataHot,
   articlesShare,
   articlesShareTopSearch,
-  articlesTechnicTopSearch
+  articlesTechnicTopSearch,
+  articlesTechnicInfo
 }

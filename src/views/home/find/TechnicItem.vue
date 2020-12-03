@@ -56,7 +56,7 @@ export default {
   methods: {
     goInfo () {
       this.$router.push(
-        `/home/technicInfo/'${this.info.id}?backPath=${this.$route.fullPath}`
+        `/home/technicInfo/${this.info.id}?backPath=${this.$route.fullPath}`
       )
     }
   }
