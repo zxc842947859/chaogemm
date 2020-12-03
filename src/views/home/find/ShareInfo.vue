@@ -33,7 +33,7 @@
             <i class="line"></i>
           </div>
         </template>
-        <div class="coment">
+        <div class="coment" ref="coment">
           <h3 class="title">
             评论<span class="comment-num">{{ total }}</span>
           </h3>
@@ -41,6 +41,7 @@
             class="comment-item"
             v-for="(item, index) in commentList"
             :key="index"
+            :id="'com' + index"
           >
             <div class="comment-lt">
               <img
@@ -62,7 +63,10 @@
                   <i class="iconfont">&#xe638;</i>
                 </div>
               </div>
-              <div class="comment-item-content" @click="replayComment(item)">
+              <div
+                class="comment-item-content"
+                @click="replayComment(item, index)"
+              >
                 {{ item.content }}
               </div>
               <div
@@ -152,7 +156,8 @@ export default {
       commentStr: '', // 评论内容
       parent: '', // 为空时发送评论,否则回复评论
       parentObj: '',
-      sendCommentPlaceStr: '我来补充两句'
+      sendCommentPlaceStr: '我来补充两句',
+      xx: ''
     }
   },
   // watch: {
@@ -162,8 +167,47 @@ export default {
   //   }
   // },
   methods: {
+    // 获取元素的绝对位置坐标（像对于页面左上角）
+    getElementPagePosition (element) {
+      // 计算y坐标
+      let actualTop = element.offsetTop
+      let currenty = element.offsetParent
+      while (currenty !== null) {
+        actualTop += currenty.offsetTop + currenty.clientTop
+        currenty = currenty.offsetParent
+      }
+      // 返回结果
+      return actualTop
+    },
+    getElementViewPosition (element) {
+      // 计算y坐标
+      let actualTop = element.offsetTop
+      let current = element.offsetParent
+      while (current !== null) {
+        actualTop += current.offsetTop + current.clientTop
+        current = current.offsetParent
+      }
+      let elementScrollTop
+      if (document.compatMode === 'BackCompat') {
+        elementScrollTop = document.body.scrollTop
+      } else {
+        elementScrollTop = document.documentElement.scrollTop
+      }
+      const right = actualTop - elementScrollTop
+      // 返回结果
+      return right
+    },
     // 关闭弹层时清空评论输入框中内容
     closePopup () {
+      this.$nextTick(() => {
+        // console.log(document.getElementById('com0'))
+        // console.log(this.$refs.coment)
+        // console.log(
+        //   this.getElementPagePosition(
+        //     document.getElementById('com0') || this.$refs.coment
+        //   )
+        // )
+      })
       // 清空评论框中的内容
       this.commentStr = ''
     },
@@ -175,7 +219,7 @@ export default {
       this.sendCommentPlaceStr = '我来补充两句'
     },
     // 回复评论
-    replayComment (item) {
+    replayComment (item, index) {
       this.show = true
       this.parent = item.id
       this.parentObj = item
@@ -183,6 +227,11 @@ export default {
     },
     // 发送评论
     async sendEvent () {
+      if (!this.xx) {
+        console.log('dfsdfdssd')
+        document.documentElement.scrollTop =
+          this.getElementPagePosition(this.$refs.coment) + 100
+      }
       if (this.commentStr) {
         try {
           const res = await articlesComments(
@@ -199,6 +248,19 @@ export default {
             this.parentObj.children_comments.push(res.data.data)
             this.$toast.success('回复成功')
           } else {
+            this.$nextTick(() => {
+              if (!this.xx) {
+                const top =
+                  this.getElementPagePosition(
+                    document.getElementById('com0')
+                  ) || 0
+                const vY = this.getElementViewPosition(
+                  document.getElementById('com0')
+                )
+                this.xx = top + vY / 2
+                document.documentElement.scrollTop = this.xx
+              }
+            })
             // 发送的新评论插入到最前面
             this.commentList.unshift(res.data.data)
             this.$toast.success('评论成功')

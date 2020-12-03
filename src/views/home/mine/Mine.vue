@@ -1,5 +1,5 @@
 <template>
-  <div class="mine" v-cloak>
+  <div class="mine" v-if="userInfo">
     <div class="top">
       <div class="top-info" @click="goMineInfo">
         <div class="left-title">
@@ -7,7 +7,11 @@
           <p>{{ userInfo.intro }}</p>
         </div>
         <div class="mine-icon">
-          <img v-if="userInfo.avatar" :src="$baseURL + userInfo.avatar" alt="" />
+          <img
+            v-if="userInfo.avatar"
+            :src="$baseURL + userInfo.avatar"
+            alt=""
+          />
           <img v-else src="@/assets/logo.png" alt="" />
         </div>
       </div>
