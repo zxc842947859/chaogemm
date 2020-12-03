@@ -59,6 +59,15 @@ function articlesCommentsId (id, params) {
   })
 }
 
+// 发表评论
+function articlesComments (data) {
+  return _fetch({
+    url: '/articles/comments',
+    method: 'post',
+    needToken: true,
+    data
+  })
+}
 export {
   articlesTechnic,
   chartDataHot,
@@ -67,5 +76,6 @@ export {
   articlesTechnicTopSearch,
   articlesTechnicInfo,
   articlesCommentsId,
-  articlesShareId
+  articlesShareId,
+  articlesComments
 }

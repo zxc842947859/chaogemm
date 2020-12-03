@@ -65,7 +65,10 @@
               <div class="comment-item-content">
                 {{ item.content }}
               </div>
-              <div class="comment-item-reply">
+              <div
+                class="comment-item-reply"
+                v-if="item.children_comments.length"
+              >
                 <div
                   class="comment-item-reply-item"
                   v-for="(item2, index2) in item.children_comments"
@@ -79,27 +82,54 @@
           </div>
         </div>
       </van-list>
-      <div class="send-coment-bar">
-        <div class="sendbox">我来补充两句</div>
-        <div class="b1 icon-box">
-          <i class="iconfont">&#xe63c;</i>
-          <span class="num">{{ infoData.read }}</span>
-        </div>
-        <div class="b2 icon-box">
-          <i class="iconfont">&#xe638;</i>
-          <span class="num">{{ infoData.star }}</span>
-        </div>
-        <div class="b3 icon-box">
-          <i class="iconfont">&#xe63e;</i>
-          <span class="num">{{ infoData.share }}</span>
+      <div style="height:65px">
+        <div class="send-coment-bar">
+          <div class="sendbox" @click="show = true">我来补充两句</div>
+          <div class="b1 icon-box">
+            <i class="iconfont">&#xe63c;</i>
+            <span class="num">{{ infoData.read }}</span>
+          </div>
+          <div class="b2 icon-box">
+            <i class="iconfont">&#xe638;</i>
+            <span class="num">{{ infoData.star }}</span>
+          </div>
+          <div class="b3 icon-box">
+            <i class="iconfont">&#xe63e;</i>
+            <span class="num">{{ infoData.share }}</span>
+          </div>
         </div>
       </div>
+      <van-popup v-model="show" position="bottom" @open="showPopover">
+        <van-field
+          v-model.trim="commentStr"
+          ref="send"
+          autofocus
+          class="send-content"
+          type="textarea"
+          row="5"
+          placeholder="我来补充两句"
+        ></van-field>
+        <div class="send-box">
+          <div class="pl"></div>
+          <div
+            @click="sendComment"
+            class="send-btn"
+            :style="{ color: commentStr ? 'red' : '#b4b4bd' }"
+          >
+            发送
+          </div>
+        </div>
+      </van-popup>
     </van-skeleton>
   </div>
 </template>
 
 <script>
-import { articlesShareId, articlesCommentsId } from '@/api/find.js'
+import {
+  articlesShareId,
+  articlesCommentsId,
+  articlesComments
+} from '@/api/find.js'
 export default {
   data () {
     return {
@@ -112,10 +142,39 @@ export default {
       currentPage: 0,
       pageSize: 3,
       commentList: [], // 评论数据
-      total: 0 // 评论条数
+      total: 0, // 评论条数
+      show: false,
+      commentStr: '', // 评论内容
+      parent: '' // 为空时发送评论,否则回复评论
     }
   },
+  // watch: {
+  //   commentStr (newVal) {
+  //     if (newVal) {
+  //     }
+  //   }
+  // },
   methods: {
+    // 发送评论
+    async sendComment () {
+      if (this.commentStr) {
+        const res = await articlesComments({
+          content: this.commentStr,
+          article: this.id,
+          parent: this.parent
+        })
+        // 发送的新评论插入到最前面
+        this.commentList.unshift(res.data.data)
+        // 关闭评论框
+        this.show = false
+      }
+    },
+    // 评论框默认聚焦
+    showPopover () {
+      this.$nextTick(() => {
+        this.$refs.send.focus()
+      })
+    },
     // 加载评论数据
     async onLoadComment () {
       const res = await articlesCommentsId(this.id, {
@@ -133,7 +192,6 @@ export default {
   async created () {
     const res = await articlesShareId(this.id)
     this.loading = false
-    console.log(res)
     this.infoData = res.data.data
   }
 }
@@ -392,6 +450,38 @@ export default {
       .iconfont {
         font-size: 25px;
         margin-bottom: 4px;
+      }
+    }
+  }
+  .van-popup {
+    padding: 25px 16px 0px;
+    .send-content {
+      background-color: #f6f2f3;
+      height: 100px;
+      font-size: 14px;
+      font-family: PingFangSC, PingFangSC-Regular;
+      font-weight: 400;
+      text-align: left;
+      color: #00b8d4;
+      line-height: 20px;
+      letter-spacing: 0px;
+      border-radius: 4px;
+    }
+    .send-box {
+      padding: 11px 0px 15px;
+      display: flex;
+      justify-content: space-between;
+      .pl {
+        flex: 1;
+      }
+      .send-btn {
+        font-size: 16px;
+        font-family: PingFangSC, PingFangSC-Regular;
+        font-weight: 400;
+        text-align: left;
+        color: #b4b4bd;
+        line-height: 23px;
+        letter-spacing: 0px;
       }
     }
   }
