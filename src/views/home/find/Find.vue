@@ -174,7 +174,7 @@ export default {
   background-color: #f6f2f3;
   .technic-content {
     background-color: #fff;
-    padding: 10px @p15;
+    padding: 10px 0px;
   }
   .marked-content {
     background-color: #fff;
