@@ -13,6 +13,7 @@ import MineInfoEdit from '@/views/home/mine/MineInfoEdit'
 import ShareList from '@/views/home/find/ShareList'
 import TechnicList from '@/views/home/find/TechnicList'
 import ShareInfo from '@/views/home/find/ShareInfo'
+import TechnicInfo from '@/views/home/find/TechnicInfo'
 import { getLocal } from '@/utils/local.js'
 import { auInfo } from '@/api/mine.js'
 
@@ -91,6 +92,11 @@ const router = new VueRouter({
         {
           path: '/home/shareInfo/:id',
           component: ShareInfo,
+          meta: {}
+        },
+        {
+          path: '/home/technicInfo/:id',
+          component: TechnicInfo,
           meta: {}
         }
       ]

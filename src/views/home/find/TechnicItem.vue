@@ -1,5 +1,5 @@
 <template>
-  <div class="technic-item">
+  <div class="technic-item" @click="goInfo">
     <div class="left">
       <div class="title van-multi-ellipsis--l2">
         {{ info.title }}
@@ -51,6 +51,14 @@ export default {
     //   }
     //   return result
     // }
+  },
+
+  methods: {
+    goInfo () {
+      this.$router.push(
+        `/home/technicInfo/'${this.info.id}?backPath=${this.$route.fullPath}`
+      )
+    }
   }
 }
 </script>
