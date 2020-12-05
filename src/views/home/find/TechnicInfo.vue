@@ -60,7 +60,10 @@
               <div class="comment-item-content">
                 {{ item.content }}
               </div>
-              <div class="comment-item-reply">
+              <div
+                class="comment-item-reply"
+                v-if="item.children_comments.length"
+              >
                 <div
                   class="comment-item-reply-item"
                   v-for="(item2, index2) in item.children_comments"
