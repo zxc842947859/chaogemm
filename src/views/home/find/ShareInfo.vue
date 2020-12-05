@@ -275,21 +275,6 @@ export default {
     },
     // 关闭弹层时清空评论输入框中内容
     closePopup () {
-      console.log(
-        this.getElementPagePosition(
-          document.getElementById('com0') || this.$refs.coment
-        ),
-        document.documentElement.scrollTop + window.outerHeight / 2
-      )
-      this.$nextTick(() => {
-        // console.log(document.getElementById('com0'))
-        // console.log(this.$refs.coment)
-        // console.log(
-        //   this.getElementPagePosition(
-        //     document.getElementById('com0') || this.$refs.coment
-        //   )
-        // )
-      })
       // 清空评论框中的内容
       this.commentStr = ''
     },
@@ -309,14 +294,8 @@ export default {
     },
     // 发送评论
     async sendEvent () {
-      const h = document.documentElement.scrollTop + window.outerHeight / 2
-      const h1 = this.getElementPagePosition(
-        document.getElementById('com0') || this.$refs.coment
-      )
-      if (!this.scrollTo && h < h1) {
-        console.log('dfsdfdssd')
-        document.documentElement.scrollTop = h1 + 100
-      }
+      !document.getElementById('com0') &&
+        this.$refs.coment.scrollIntoView()
       if (this.commentStr) {
         try {
           const res = await articlesComments(
@@ -333,21 +312,15 @@ export default {
             this.parentObj.children_comments.push(res.data.data)
             this.$toast.success('回复成功')
           } else {
-            this.$nextTick(() => {
-              // const bb = this.getElementPagePosition(
-              //   document.getElementById('com0')
-              // )
-              const aa =
-                this.getElementViewPosition(document.getElementById('com0')) +
-                window.outerHeight / 2
-              const bb = document.documentElement.scrollTop + aa
-              console.log(this.scrollTo)
-              if (this.scrollTo !== bb) {
-                this.scrollTo = bb
-                document.documentElement.scrollTop =
-                  document.documentElement.scrollTop + aa
-              }
+            const bb = this.scrollTop
+              ? document.getElementById('com0').parentElement
+              : document.getElementById('com0')
+            bb.scrollIntoView(true, {
+              behavior: 'smooth',
+              block: 'end',
+              inline: 'nearest'
             })
+            this.scrollTop = true
             // 发送的新评论插入到最前面
             this.commentList.unshift(res.data.data)
             // this.total += 1
