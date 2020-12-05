@@ -243,36 +243,6 @@ export default {
       }
       this.$store.dispatch('refreshUserInfo')
     },
-    // 获取元素的绝对位置坐标（像对于页面左上角）
-    getElementPagePosition (element) {
-      // 计算y坐标
-      let actualTop = element.offsetTop
-      let currenty = element.offsetParent
-      while (currenty !== null) {
-        actualTop += currenty.offsetTop + currenty.clientTop
-        currenty = currenty.offsetParent
-      }
-      // 返回结果
-      return actualTop
-    },
-    getElementViewPosition (element) {
-      // 计算y坐标
-      let actualTop = element.offsetTop
-      let current = element.offsetParent
-      while (current !== null) {
-        actualTop += current.offsetTop + current.clientTop
-        current = current.offsetParent
-      }
-      let elementScrollTop
-      if (document.compatMode === 'BackCompat') {
-        elementScrollTop = document.body.scrollTop
-      } else {
-        elementScrollTop = document.documentElement.scrollTop
-      }
-      const right = actualTop - elementScrollTop
-      // 返回结果
-      return right
-    },
     // 关闭弹层时清空评论输入框中内容
     closePopup () {
       // 清空评论框中的内容
@@ -294,8 +264,7 @@ export default {
     },
     // 发送评论
     async sendEvent () {
-      !document.getElementById('com0') &&
-        this.$refs.coment.scrollIntoView()
+      !document.getElementById('com0') && this.$refs.coment.scrollIntoView()
       if (this.commentStr) {
         try {
           const res = await articlesComments(
