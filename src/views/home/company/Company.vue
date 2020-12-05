@@ -1,7 +1,6 @@
 <template>
   <div>
     公司
-    <router-view></router-view>
   </div>
 </template>
 
