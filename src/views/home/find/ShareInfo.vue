@@ -58,7 +58,13 @@
                   <div class="nick-name">{{ item.author.nickname }}</div>
                   <div class="time">{{ item.created_at | formatTime }}</div>
                 </div>
-                <div class="user-info-rt">
+                <div
+                  class="user-info-rt"
+                  @click="commentStar(item)"
+                  :class="{
+                    red: isRed('starComments', item.id)
+                  }"
+                >
                   <span class="star-num">{{ item.star || 0 }}</span>
                   <i class="iconfont">&#xe638;</i>
                 </div>
@@ -93,7 +99,7 @@
             class="b1 icon-box"
             @click="collectOrcancel"
             :class="{
-              red: isLogin && userInfo.collectArticles.includes(+id)
+              red: isRed('collectArticles', id)
             }"
           >
             <i class="iconfont">&#xe63c;</i>
@@ -151,7 +157,8 @@ import {
   articlesCommentsId,
   articlesComments,
   articlesCollect,
-  articlesStar
+  articlesStar,
+  articleCommentsStar
 } from '@/api/find.js'
 import { mapState } from 'vuex'
 export default {
@@ -178,19 +185,33 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo', 'isLogin'])
+    ...mapState(['userInfo', 'isLogin']),
+    isRed () {
+      return (str, id) => {
+        return this.userInfo[str] && this.userInfo[str].includes(+id)
+      }
+    }
   },
 
   mounted () {},
 
   methods: {
+    async commentStar (item) {
+      const res = await articleCommentsStar({ id: item.id })
+      // 更新文章收藏数
+      item.star = res.data.data.num
+      // 判断当前文章是收藏还是取消
+      if (res.data.data.list.includes(item.id)) {
+        this.$toast.success('收藏成功')
+      } else {
+        this.$toast.fail('取消收藏')
+      }
+      this.$store.dispatch('refreshUserInfo')
+    },
     async starOrCancel () {
+      this.$toast.loading()
       this.star = !this.star
       this.star ? this.infoData.star++ : this.infoData.star--
-      await articlesStar({ article: this.id })
-      // this.infoData.star = res.data.data.num
-
-      this.$store.dispatch('refreshUserInfo')
       if (this.star) {
         // this.star = true
         this.$toast.success({
@@ -198,12 +219,16 @@ export default {
           message: '点赞成功'
         })
       } else {
-        this.$toast.fail({
+        this.$toast.success({
           duration: 1000,
           message: '取消点赞'
         })
         // this.star = false
       }
+      await articlesStar({ article: this.id })
+      // this.infoData.star = res.data.data.num
+
+      this.$store.dispatch('refreshUserInfo')
     },
     async collectOrcancel () {
       const res = await articlesCollect({ id: this.id })

@@ -89,6 +89,15 @@ function articlesStar (data) {
     data
   })
 }
+
+function articleCommentsStar (data) {
+  return _fetch({
+    url: '/article-comments/star',
+    method: 'post',
+    needToken: true,
+    data
+  })
+}
 export {
   articlesTechnic,
   chartDataHot,
@@ -100,5 +109,6 @@ export {
   articlesShareId,
   articlesComments,
   articlesCollect,
-  articlesStar
+  articlesStar,
+  articleCommentsStar
 }
