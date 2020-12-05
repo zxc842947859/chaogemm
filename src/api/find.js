@@ -69,6 +69,16 @@ function articlesComments (data, fullPath) {
     fullPath
   })
 }
+
+// 收藏面经
+function articlesCollect (data) {
+  return _fetch({
+    url: '/articles/collect',
+    method: 'post',
+    needToken: true,
+    data
+  })
+}
 export {
   articlesTechnic,
   chartDataHot,
@@ -78,5 +88,6 @@ export {
   articlesTechnicInfo,
   articlesCommentsId,
   articlesShareId,
-  articlesComments
+  articlesComments,
+  articlesCollect
 }

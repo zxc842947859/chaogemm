@@ -89,9 +89,15 @@
       <div style="height:65px">
         <div class="send-coment-bar">
           <div class="sendbox" @click="sendComment">我来补充两句</div>
-          <div class="b1 icon-box">
+          <div
+            class="b1 icon-box"
+            @click="collectOrcancel"
+            :class="{
+              red: isLogin && userInfo.collectArticles.includes(+id)
+            }"
+          >
             <i class="iconfont">&#xe63c;</i>
-            <span class="num">{{ infoData.read }}</span>
+            <span class="num">{{ infoData.collect }}</span>
           </div>
           <div class="b2 icon-box">
             <i class="iconfont">&#xe638;</i>
@@ -137,8 +143,10 @@
 import {
   articlesShareId,
   articlesCommentsId,
-  articlesComments
+  articlesComments,
+  articlesCollect
 } from '@/api/find.js'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -157,16 +165,25 @@ export default {
       parent: '', // 为空时发送评论,否则回复评论
       parentObj: '',
       sendCommentPlaceStr: '我来补充两句',
-      xx: ''
+      scrollTo: ''
     }
   },
-  // watch: {
-  //   show () {
-  //     // 清空评论框中的内容
-  //     this.commentStr = ''
-  //   }
-  // },
+  computed: {
+    ...mapState(['userInfo', 'isLogin'])
+  },
   methods: {
+    async collectOrcancel () {
+      const res = await articlesCollect({ id: this.id })
+      // 更新文章收藏数
+      this.infoData.collect = res.data.data.num
+      // 判断当前文章是收藏还是取消
+      this.$store.dispatch('refreshUserInfo')
+      if (res.data.data.list.includes(+this.id)) {
+        this.$toast.success('收藏成功')
+      } else {
+        this.$toast.fail('取消收藏')
+      }
+    },
     // 获取元素的绝对位置坐标（像对于页面左上角）
     getElementPagePosition (element) {
       // 计算y坐标
@@ -199,6 +216,12 @@ export default {
     },
     // 关闭弹层时清空评论输入框中内容
     closePopup () {
+      console.log(
+        this.getElementPagePosition(
+          document.getElementById('com0') || this.$refs.coment
+        ),
+        document.documentElement.scrollTop + window.outerHeight / 2
+      )
       this.$nextTick(() => {
         // console.log(document.getElementById('com0'))
         // console.log(this.$refs.coment)
@@ -227,10 +250,13 @@ export default {
     },
     // 发送评论
     async sendEvent () {
-      if (!this.xx) {
+      const h = document.documentElement.scrollTop + window.outerHeight / 2
+      const h1 = this.getElementPagePosition(
+        document.getElementById('com0') || this.$refs.coment
+      )
+      if (!this.scrollTo && h < h1) {
         console.log('dfsdfdssd')
-        document.documentElement.scrollTop =
-          this.getElementPagePosition(this.$refs.coment) + 100
+        document.documentElement.scrollTop = h1 + 100
       }
       if (this.commentStr) {
         try {
@@ -249,20 +275,23 @@ export default {
             this.$toast.success('回复成功')
           } else {
             this.$nextTick(() => {
-              if (!this.xx) {
-                const top =
-                  this.getElementPagePosition(
-                    document.getElementById('com0')
-                  ) || 0
-                const vY = this.getElementViewPosition(
-                  document.getElementById('com0')
-                )
-                this.xx = top + vY / 2
-                document.documentElement.scrollTop = this.xx
+              // const bb = this.getElementPagePosition(
+              //   document.getElementById('com0')
+              // )
+              const aa =
+                this.getElementViewPosition(document.getElementById('com0')) +
+                window.outerHeight / 2
+              const bb = document.documentElement.scrollTop + aa
+              console.log(this.scrollTo)
+              if (this.scrollTo !== bb) {
+                this.scrollTo = bb
+                document.documentElement.scrollTop =
+                  document.documentElement.scrollTop + aa
               }
             })
             // 发送的新评论插入到最前面
             this.commentList.unshift(res.data.data)
+            // this.total += 1
             this.$toast.success('评论成功')
           }
           // 关闭评论框
@@ -587,6 +616,9 @@ export default {
         letter-spacing: 0px;
       }
     }
+  }
+  .red {
+    color: red !important;
   }
 }
 </style>
