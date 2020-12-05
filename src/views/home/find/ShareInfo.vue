@@ -99,7 +99,13 @@
             <i class="iconfont">&#xe63c;</i>
             <span class="num">{{ infoData.collect }}</span>
           </div>
-          <div class="b2 icon-box">
+          <div
+            class="b2 icon-box"
+            @click="starOrCancel"
+            :class="{
+              red: star
+            }"
+          >
             <i class="iconfont">&#xe638;</i>
             <span class="num">{{ infoData.star }}</span>
           </div>
@@ -144,7 +150,8 @@ import {
   articlesShareId,
   articlesCommentsId,
   articlesComments,
-  articlesCollect
+  articlesCollect,
+  articlesStar
 } from '@/api/find.js'
 import { mapState } from 'vuex'
 export default {
@@ -165,24 +172,50 @@ export default {
       parent: '', // 为空时发送评论,否则回复评论
       parentObj: '',
       sendCommentPlaceStr: '我来补充两句',
-      scrollTo: ''
+      scrollTo: '',
+      star: '',
+      collect: ''
     }
   },
   computed: {
     ...mapState(['userInfo', 'isLogin'])
   },
+
+  mounted () {},
+
   methods: {
+    async starOrCancel () {
+      this.star = !this.star
+      this.star ? this.infoData.star++ : this.infoData.star--
+      await articlesStar({ article: this.id })
+      // this.infoData.star = res.data.data.num
+
+      this.$store.dispatch('refreshUserInfo')
+      if (this.star) {
+        // this.star = true
+        this.$toast.success({
+          duration: 1000,
+          message: '点赞成功'
+        })
+      } else {
+        this.$toast.fail({
+          duration: 1000,
+          message: '取消点赞'
+        })
+        // this.star = false
+      }
+    },
     async collectOrcancel () {
       const res = await articlesCollect({ id: this.id })
       // 更新文章收藏数
       this.infoData.collect = res.data.data.num
       // 判断当前文章是收藏还是取消
-      this.$store.dispatch('refreshUserInfo')
       if (res.data.data.list.includes(+this.id)) {
         this.$toast.success('收藏成功')
       } else {
         this.$toast.fail('取消收藏')
       }
+      this.$store.dispatch('refreshUserInfo')
     },
     // 获取元素的绝对位置坐标（像对于页面左上角）
     getElementPagePosition (element) {
@@ -325,6 +358,10 @@ export default {
     const res = await articlesShareId(this.id)
     this.loading = false
     this.infoData = res.data.data
+
+    this.star =
+      this.$store.state.isLogin &&
+      this.$store.state.userInfo.starArticles.includes(+this.id)
   }
 }
 </script>

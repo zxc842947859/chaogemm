@@ -79,6 +79,16 @@ function articlesCollect (data) {
     data
   })
 }
+
+// 面经点赞
+function articlesStar (data) {
+  return _fetch({
+    url: '/articles/star',
+    method: 'post',
+    needToken: true,
+    data
+  })
+}
 export {
   articlesTechnic,
   chartDataHot,
@@ -89,5 +99,6 @@ export {
   articlesCommentsId,
   articlesShareId,
   articlesComments,
-  articlesCollect
+  articlesCollect,
+  articlesStar
 }
