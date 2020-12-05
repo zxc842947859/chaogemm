@@ -1,28 +1,50 @@
 <template>
-  <div class="question">
+  <div class="question" v-if="info">
     <van-dropdown-menu>
-      <van-dropdown-item>
+      <van-dropdown-item ref="dropdown">
         <template #title>
           <div class="title">
             面试宝典<span class="city">{{ city }}</span>
           </div>
         </template>
         <template #default>
-          <van-index-bar :index-list="Object.keys(info.citys || [])">
+          <van-index-bar :index-list="Object.keys(info.citys)">
             <div v-for="(val, key, index) in info.citys" :key="index">
               <van-index-anchor :index="key" class="anchor">
                 {{ key }}
               </van-index-anchor>
               <van-cell
-                :title="item"
+                class="cell"
                 v-for="(item, index) in val"
                 :key="index"
-              ></van-cell>
+                @click="cityClick(item)"
+              >
+                <template #title>
+                  <div class="cell-title">
+                    {{ item }}
+                  </div>
+                </template></van-cell
+              >
             </div>
           </van-index-bar>
         </template>
       </van-dropdown-item>
     </van-dropdown-menu>
+    <div class="content">
+      <div class="tag-list">
+        <van-tag
+          v-for="(item, index) in info.cityPositions[city]"
+          :key="index"
+          color="#f7f4f5"
+          text-color="#9797a8"
+          class="tag"
+          :class="{ active: currentIndex === index }"
+          @click="currentIndex = index"
+          round
+          >{{ item.name }}</van-tag
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -32,13 +54,20 @@ export default {
   data () {
     return {
       city: '北京',
-      info: {}
+      info: '',
+      currentIndex: 0
     }
   },
   async created () {
     const res = await interviewFilters()
-    console.log(res)
     this.info = res.data.data
+  },
+  methods: {
+    cityClick (item) {
+      this.city = item
+      // 关闭下拉菜单
+      this.$refs.dropdown.toggle(false)
+    }
   }
 }
 </script>
@@ -78,6 +107,27 @@ export default {
       color: #939393;
       line-height: 40px;
       letter-spacing: 0px;
+    }
+  }
+  .cell {
+    .cell-title:hover {
+      color: orangered;
+    }
+  }
+  .content {
+    padding: 25px @p15 10px;
+    .tag-list {
+      display: flex;
+      overflow: auto;
+      .tag {
+        flex-shrink: 0; // 不自动缩放
+        padding: 6px 15px;
+        margin-right: 15px;
+      }
+      .active {
+        background-color: #00b8d4 !important;
+        color: #fff !important;
+      }
     }
   }
 }
