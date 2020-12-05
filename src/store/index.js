@@ -42,5 +42,12 @@ export default new Vuex.Store({
       store.commit('setLoginState', true)
     }
   },
+  getters: {
+    isRed (state) {
+      return (str, id) => {
+        return state.userInfo[str] && state.userInfo[str].includes(+id)
+      }
+    }
+  },
   modules: {}
 })

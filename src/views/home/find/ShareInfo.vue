@@ -160,7 +160,7 @@ import {
   articlesStar,
   articleCommentsStar
 } from '@/api/find.js'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -186,11 +186,12 @@ export default {
   },
   computed: {
     ...mapState(['userInfo', 'isLogin']),
-    isRed () {
-      return (str, id) => {
-        return this.userInfo[str] && this.userInfo[str].includes(+id)
-      }
-    }
+    ...mapGetters(['isRed'])
+    // isRed () {
+    //   return (str, id) => {
+    //     return this.userInfo[str] && this.userInfo[str].includes(+id)
+    //   }
+    // }
   },
 
   mounted () {},
