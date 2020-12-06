@@ -16,4 +16,13 @@ function interviewQuestions (params) {
   })
 }
 
-export { interviewFilters, interviewQuestions }
+// 提交试题
+function questionsSubmit (data) {
+  return _fetch({
+    url: '/questions/submit',
+    method: 'post',
+    needToken: true,
+    data
+  })
+}
+export { interviewFilters, interviewQuestions, questionsSubmit }

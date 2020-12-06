@@ -20,7 +20,16 @@
       <ul class="que-options">
         <li
           class="option"
-          :class="{ active: ans1 === optionStr[index] }"
+          :class="{
+            active: ans1 === optionStr[index] && !list[currIndex].ans,
+            right:
+              list[currIndex].ans &&
+              list[currIndex].ans.singleAnswer === optionStr[index],
+            error:
+              list[currIndex].ans &&
+              ans1 === optionStr[index] &&
+              list[currIndex].ans.singleAnswer !== ans1
+          }"
           v-for="(item, index) in list[currIndex].detail.option"
           :key="index"
           @click="ans1Click(index)"
@@ -28,6 +37,20 @@
           {{ optionStr[index] }}. {{ item }}
         </li>
       </ul>
+      <div class="answer" v-if="step > 1">
+        <h3 class="answer-title">答案解析</h3>
+        <div class="answer-rigth">
+          正确答案: {{ list[currIndex].ans.singleAnswer }}
+        </div>
+        <div class="other">
+          <div>难度: {{ diffObj[list[currIndex].ans.difficulty] }}</div>
+          <div>难度: {{ list[currIndex].ans.submitNum }}</div>
+          <div>难度: {{ list[currIndex].ans.correctNum }}</div>
+        </div>
+        <div class="answer-content">
+          {{ list[currIndex].ans.answerAnalysis }}
+        </div>
+      </div>
     </div>
     <div class="bottom-bar">
       <div class="f1">
@@ -43,14 +66,23 @@
         >/{{ list.length }}题
       </div>
       <div class="f4">
-        <van-button type="danger" class="btn">提交</van-button>
+        <van-button
+          type="danger"
+          class="btn"
+          @click="submitQuestion"
+          v-if="step < 2"
+          >提交</van-button
+        >
+        <van-button type="danger" class="btn" v-else-if="step === 2"
+          >下一题</van-button
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { interviewQuestions } from '@/api/question.js'
+import { interviewQuestions, questionsSubmit } from '@/api/question.js'
 export default {
   data () {
     return {
@@ -68,18 +100,45 @@ export default {
       ans1: '', // 单选答案
       ans2: [], // 多选条案
       ans3: '', // 简答答案
-      step: 0 // 第几步
+      step: 0, // 第几步
+      diffObj: {
+        1: '简单',
+        2: '一般',
+        3: '困难'
+      }
     }
   },
   async created () {
     const res = await interviewQuestions({ type: this.type, city: this.city })
-    console.log(res)
+    console.log('题目', res)
     this.list = res.data.data
   },
   methods: {
+    // 单选题选择
     ans1Click (index) {
-      this.ans1 = this.optionStr[index]
-      this.step = 1
+      if (this.step < 2) {
+        this.ans1 = this.optionStr[index]
+        this.step = 1
+      }
+    },
+    // 单选题提交答案
+    async submitQuestion () {
+      if (this.ans1) {
+        this.$toast.loading({
+          duration: 0
+        })
+        const res = await questionsSubmit({
+          id: this.list[this.currIndex].id,
+          singleAnswer: this.ans1,
+          multipleAnswer: this.ans2
+        })
+        console.log('提交', res)
+        this.$toast.clear()
+        this.list[this.currIndex].ans = res.data.data
+        this.step = 2
+      } else {
+        this.$toast.fail('请选择选项')
+      }
     }
   }
 }
@@ -113,7 +172,7 @@ export default {
       }
     }
     .que-options {
-      padding: 0px 10px;
+      padding: 0px 10px 16px;
       .option {
         padding: 14px 15px;
         margin-bottom: 16px;
@@ -129,9 +188,65 @@ export default {
       .active {
         border-color: #000;
       }
+      .right {
+        background: #ddfad9;
+      }
+      .error {
+        background: #ffefea;
+      }
+    }
+    .answer {
+      border-top: 1px solid #eceaea;
+      padding-top: 18px;
+      .answer-title {
+        font-size: 18px;
+        font-family: PingFangSC, PingFangSC-Medium;
+        font-weight: 500;
+        text-align: left;
+        color: #222222;
+        line-height: 25px;
+        letter-spacing: 0px;
+        margin-bottom: 18px;
+      }
+      .answer-rigth {
+        font-size: 16px;
+        font-family: PingFangSC, PingFangSC-Regular;
+        font-weight: 400;
+        text-align: justify;
+        color: #1dc779;
+        line-height: 22px;
+        margin-bottom: 18px;
+      }
+      .other {
+        padding: 6px 10px;
+        height: 32px;
+        background: #f7f4f5;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-family: PingFangSC, PingFangSC-Regular;
+        font-weight: 400;
+        text-align: left;
+        color: #545671;
+        line-height: 16px;
+        letter-spacing: 0px;
+        margin-bottom: 20px;
+      }
+      .answer-content {
+        font-size: 16px;
+        font-family: PingFangSC, PingFangSC-Regular;
+        font-weight: 400;
+        text-align: justify;
+        color: #181a39;
+        line-height: 22px;
+        margin-bottom: 20px;
+      }
     }
   }
   .bottom-bar {
+    background: #fff;
     position: fixed;
     left: 0;
     bottom: 0;
