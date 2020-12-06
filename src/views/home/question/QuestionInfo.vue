@@ -196,13 +196,10 @@ export default {
   },
   async created () {
     const res = await interviewQuestions({ type: this.type, city: this.city })
-    console.log('题目', res)
     this.list = res.data.data
-    // this.nextQuestion()
   },
   methods: {
     dtk () {
-      console.log(this.list)
       this.showCard = true
     },
     // 单选题选择
@@ -224,7 +221,6 @@ export default {
         singleAnswer: this.ans1,
         multipleAnswer: this.ans2
       })
-      console.log('提交', res)
       this.$toast.clear()
       this.list[this.currIndex].ans = res.data.data
       // 不是最后一题就为2,最后一题为3显示结果
@@ -235,7 +231,6 @@ export default {
       this.currIndex++
       // 获取当前题目详情
       const res = await questionsId(this.list[this.currIndex].id)
-      console.log('下一题', res)
       this.list[this.currIndex].detail = res.data.data
       // 新的一题状态恢复到初始
       this.step = 0

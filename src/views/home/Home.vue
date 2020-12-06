@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <keep-alive>
+    <keep-alive include="find">
       <router-view></router-view>
     </keep-alive>
     <van-tabbar
