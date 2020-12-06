@@ -1,7 +1,7 @@
 <template>
   <div class="question-info">
     <CGNavBar title="刷题" right="答题卡" path="/home/question"></CGNavBar>
-    <div class="content" v-if="list.length">
+    <div class="content" v-if="list.length && list[currIndex].detail">
       <p class="question-title">
         【{{ typeObj[list[currIndex].detail.type] }}】{{
           list[currIndex].detail.title
@@ -17,9 +17,9 @@
           >{{ item }}</van-tag
         >
       </div>
-      <ul class="que-options">
+      <ul class="que-options" v-if="list[currIndex].detail.type === 1">
         <li
-          class="option"
+          class="option iconfont"
           :class="{
             active: ans1 === optionStr[index] && !list[currIndex].ans,
             right:
@@ -37,15 +37,45 @@
           {{ optionStr[index] }}. {{ item }}
         </li>
       </ul>
+      <ul class="que-options" v-else-if="list[currIndex].detail.type === 2">
+        <li
+          class="option iconfont"
+          v-for="(item, index) in list[currIndex].detail.option"
+          :key="index"
+          @click="ans2Click(optionStr[index])"
+          :class="{
+            active: ans2.includes(optionStr[index]) && !list[currIndex].ans,
+            right:
+              list[currIndex].ans &&
+              list[currIndex].ans.multipleAnswer.includes(optionStr[index]) &&
+              ans2.includes(optionStr[index]),
+            error:
+              (list[currIndex].ans &&
+                list[currIndex].ans.multipleAnswer.includes(optionStr[index]) &&
+                !ans2.includes(optionStr[index])) ||
+              (list[currIndex].ans &&
+                !list[currIndex].ans.multipleAnswer.includes(
+                  optionStr[index]
+                ) &&
+                ans2.includes(optionStr[index]))
+          }"
+        >
+          {{ optionStr[index] }}. {{ item }}
+        </li>
+      </ul>
       <div class="answer" v-if="step > 1">
         <h3 class="answer-title">答案解析</h3>
         <div class="answer-rigth">
-          正确答案: {{ list[currIndex].ans.singleAnswer }}
+          正确答案:
+          {{
+            list[currIndex].ans.singleAnswer ||
+              list[currIndex].ans.multipleAnswer
+          }}
         </div>
         <div class="other">
           <div>难度: {{ diffObj[list[currIndex].ans.difficulty] }}</div>
-          <div>难度: {{ list[currIndex].ans.submitNum }}</div>
-          <div>难度: {{ list[currIndex].ans.correctNum }}</div>
+          <div>提交次数: {{ list[currIndex].ans.submitNum }}</div>
+          <div>正确次数: {{ list[currIndex].ans.correctNum }}</div>
         </div>
         <div class="answer-content">
           {{ list[currIndex].ans.answerAnalysis }}
@@ -71,18 +101,28 @@
           class="btn"
           @click="submitQuestion"
           v-if="step < 2"
+          :disabled="!(ans1 || ans2.length || ans3)"
           >提交</van-button
         >
-        <van-button type="danger" class="btn" v-else-if="step === 2"
+        <van-button
+          type="danger"
+          class="btn"
+          v-else-if="step === 2"
+          @click="nextQuestion"
           >下一题</van-button
         >
+        <van-button type="danger" class="btn" v-else>结束</van-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { interviewQuestions, questionsSubmit } from '@/api/question.js'
+import {
+  interviewQuestions,
+  questionsSubmit,
+  questionsId
+} from '@/api/question.js'
 export default {
   data () {
     return {
@@ -90,7 +130,7 @@ export default {
       city: this.$route.query.city,
       type: this.$route.query.type,
       list: [], // 所有题目数组
-      currIndex: 0, // 当前第几题
+      currIndex: 1, // 当前第几题
       optionStr: 'ABCDEFG', // 答案选项
       typeObj: {
         1: '单选',
@@ -112,10 +152,12 @@ export default {
     const res = await interviewQuestions({ type: this.type, city: this.city })
     console.log('题目', res)
     this.list = res.data.data
+    this.nextQuestion()
   },
   methods: {
     // 单选题选择
     ans1Click (index) {
+      // 提交后不能再修改选项
       if (this.step < 2) {
         this.ans1 = this.optionStr[index]
         this.step = 1
@@ -123,21 +165,43 @@ export default {
     },
     // 单选题提交答案
     async submitQuestion () {
-      if (this.ans1) {
-        this.$toast.loading({
-          duration: 0
-        })
-        const res = await questionsSubmit({
-          id: this.list[this.currIndex].id,
-          singleAnswer: this.ans1,
-          multipleAnswer: this.ans2
-        })
-        console.log('提交', res)
-        this.$toast.clear()
-        this.list[this.currIndex].ans = res.data.data
-        this.step = 2
-      } else {
-        this.$toast.fail('请选择选项')
+      this.$toast.loading({
+        duration: 0
+      })
+      // 提交条案
+      const res = await questionsSubmit({
+        id: this.list[this.currIndex].id,
+        singleAnswer: this.ans1,
+        multipleAnswer: this.ans2
+      })
+      console.log('提交', res)
+      this.$toast.clear()
+      this.list[this.currIndex].ans = res.data.data
+      // 不是最后一题就为2,最后一题为3显示结果
+      this.step = this.currIndex === this.list.length - 1 ? 3 : 2
+    },
+    // 下一题
+    async nextQuestion () {
+      this.currIndex++
+      // 获取当前题目详情
+      const res = await questionsId(this.list[this.currIndex].id)
+      console.log('下一题', res)
+      this.list[this.currIndex].detail = res.data.data
+      // 新的一题状态恢复到初始
+      this.step = 0
+      this.ans1 = ''
+      this.ans2 = []
+      this.ans3 = ''
+    },
+    ans2Click (option) {
+      // 提交后不能再修改选项
+      if (this.step < 2) {
+        const index = this.ans2.indexOf(option)
+        if (index === -1) {
+          this.ans2.push(option)
+        } else {
+          this.ans2.splice(index, 1)
+        }
       }
     }
   }
@@ -155,7 +219,7 @@ export default {
       text-align: justify;
       color: #181a39;
       line-height: 22px;
-      margin-bottom: 5px;
+      margin-bottom: 12px;
     }
     .tag-list {
       margin-bottom: 28px;
@@ -190,9 +254,30 @@ export default {
       }
       .right {
         background: #ddfad9;
+        position: relative;
+        color: #1dc779;
+        &::after {
+          content: '\e604';
+          color: #1dc779;
+          font-size: 20px;
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
       }
       .error {
         background: #ffefea;
+        position: relative;
+        &::after {
+          content: '\e605';
+          color: #e40137;
+          font-size: 20px;
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
       }
     }
     .answer {

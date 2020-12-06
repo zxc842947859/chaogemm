@@ -25,4 +25,13 @@ function questionsSubmit (data) {
     data
   })
 }
-export { interviewFilters, interviewQuestions, questionsSubmit }
+
+// 获取指定题
+function questionsId (id) {
+  return _fetch({
+    url: '/questions/' + id,
+    needToken: true
+  })
+}
+
+export { interviewFilters, interviewQuestions, questionsSubmit, questionsId }
