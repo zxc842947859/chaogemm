@@ -99,10 +99,7 @@
       <div class="e-num">23,453,245,000</div>
     </div>
     <div class="bottom">
-      <van-button
-        type="primary"
-        class="btn"
-        @click="$router.push('/home/questionInfo')"
+      <van-button type="primary" class="btn" @click="goInfo"
         >模拟面试</van-button
       >
     </div>
@@ -134,6 +131,16 @@ export default {
       // 关闭下拉菜单
       this.$refs.dropdown.toggle(false)
       this.currentIndex = 0
+    },
+    goInfo () {
+      // 跳转至刷题同时传入查询参数
+      this.$router.push({
+        path: '/home/questionInfo',
+        query: {
+          type: this.info.cityPositions[this.city][this.currentIndex].id,
+          city: this.city
+        }
+      })
     }
   }
 }

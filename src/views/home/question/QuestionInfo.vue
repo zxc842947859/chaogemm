@@ -1,21 +1,32 @@
 <template>
   <div class="question-info">
     <CGNavBar title="刷题" right="答题卡" path="/home/question"></CGNavBar>
-    <div class="content">
+    <div class="content" v-if="list.length">
       <p class="question-title">
-        【单选】在某个时期内，个体对某种刺激特别敏感，过了这个时期，同样的刺激则影响很小或没有影响，这个时期成为（
-        ）。
+        【{{ typeObj[list[currIndex].detail.type] }}】{{
+          list[currIndex].detail.title
+        }}
       </p>
       <div class="tag-list">
-        <van-tag color="#f7f4f5" text-color="#b4b4bd" class="tag"
-          >教育培训</van-tag
+        <van-tag
+          color="#f7f4f5"
+          text-color="#b4b4bd"
+          class="tag"
+          v-for="(item, index) in list[currIndex].detail.tag"
+          :key="index"
+          >{{ item }}</van-tag
         >
       </div>
       <ul class="que-options">
-        <li class="option">A. 关键期</li>
-        <li class="option">A. 关键期</li>
-        <li class="option">A. 关键期</li>
-        <li class="option">A. 关键期</li>
+        <li
+          class="option"
+          :class="{ active: ans1 === optionStr[index] }"
+          v-for="(item, index) in list[currIndex].detail.option"
+          :key="index"
+          @click="ans1Click(index)"
+        >
+          {{ optionStr[index] }}. {{ item }}
+        </li>
       </ul>
     </div>
     <div class="bottom-bar">
@@ -27,7 +38,10 @@
         <i class="iconfont">&#xe606;</i>
         <div class="txt">反馈</div>
       </div>
-      <div class="f3"><span class="cur">2</span>/233题</div>
+      <div class="f3">
+        <span class="cur">{{ currIndex + 1 }}</span
+        >/{{ list.length }}题
+      </div>
       <div class="f4">
         <van-button type="danger" class="btn">提交</van-button>
       </div>
@@ -36,13 +50,45 @@
 </template>
 
 <script>
-export default {}
+import { interviewQuestions } from '@/api/question.js'
+export default {
+  data () {
+    return {
+      // 接收路由传参
+      city: this.$route.query.city,
+      type: this.$route.query.type,
+      list: [], // 所有题目数组
+      currIndex: 0, // 当前第几题
+      optionStr: 'ABCDEFG', // 答案选项
+      typeObj: {
+        1: '单选',
+        2: '多选',
+        3: '简答'
+      },
+      ans1: '', // 单选答案
+      ans2: [], // 多选条案
+      ans3: '', // 简答答案
+      step: 0 // 第几步
+    }
+  },
+  async created () {
+    const res = await interviewQuestions({ type: this.type, city: this.city })
+    console.log(res)
+    this.list = res.data.data
+  },
+  methods: {
+    ans1Click (index) {
+      this.ans1 = this.optionStr[index]
+      this.step = 1
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
 .question-info {
   .content {
-    padding: 25px @p15 0px;
+    padding: 25px @p15 85px;
     .question-title {
       font-size: 16px;
       font-family: PingFangSC, PingFangSC-Regular;
@@ -69,7 +115,7 @@ export default {}
     .que-options {
       padding: 0px 10px;
       .option {
-        padding-left: 15px;
+        padding: 14px 15px;
         margin-bottom: 16px;
         border: 1px solid #f7f4f5;
         border-radius: 4px;
@@ -78,8 +124,10 @@ export default {}
         font-weight: 400;
         text-align: justify;
         color: #181a39;
-        line-height: 48px;
-        height: 50px;
+        line-height: 22px;
+      }
+      .active {
+        border-color: #000;
       }
     }
   }
