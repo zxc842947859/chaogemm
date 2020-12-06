@@ -59,6 +59,12 @@
           {{ optionStr[index] }}. {{ item }}
         </li>
       </ul>
+      <div v-else class="record">
+        <div class="tip">按住说话</div>
+        <div class="record-icon">
+          <img class="icon" src="@/assets/btn_shuohua_nor.png" alt="" />
+        </div>
+      </div>
       <div class="answer" v-if="step > 1">
         <h3 class="answer-title">答案解析</h3>
         <div class="answer-rigth">
@@ -126,7 +132,7 @@ export default {
       city: this.$route.query.city,
       type: this.$route.query.type,
       list: [], // 所有题目数组
-      currIndex: 1, // 当前第几题
+      currIndex: 15, // 当前第几题
       optionStr: 'ABCDEFG', // 答案选项
       typeObj: {
         1: '单选',
@@ -276,6 +282,43 @@ export default {
         }
       }
     }
+    .record {
+      padding: 32px 0px;
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      bottom: 85px;
+      left: 0px;
+      width: 100%;
+      height: 234px;
+      background-color: #f7f5f4;
+      text-align: center;
+      .tip {
+        font-size: 16px;
+        font-family: PingFangSC, PingFangSC-Regular;
+        font-weight: 400;
+        text-align: center;
+        color: #545671;
+        line-height: 22px;
+        margin-bottom: 16px;
+      }
+      .record-icon {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background-color: #fff;
+        box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.17);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        .icon {
+          width: 68px;
+          height: 68px;
+        }
+      }
+    }
     .answer {
       border-top: 1px solid #eceaea;
       padding-top: 18px;
@@ -339,7 +382,7 @@ export default {
     padding: 10px @p15 30px;
     text-align: center;
     /* x偏移量 | y偏移量 | 阴影模糊半径 | 阴影颜色 */
-    box-shadow: 0px -1px 2px rgba(197, 197, 197, 0.205);
+    box-shadow: 0px -2px 4px 0px rgba(24, 26, 57, 0.04);
     .f1,
     .f2 {
       font-size: 12px;
