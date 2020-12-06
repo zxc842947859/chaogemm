@@ -49,17 +49,11 @@
             active: ans2.includes(optionStr[index]) && !list[currIndex].ans,
             right:
               list[currIndex].ans &&
-              list[currIndex].ans.multipleAnswer.includes(optionStr[index]) &&
-              ans2.includes(optionStr[index]),
+              list[currIndex].ans.multipleAnswer.includes(optionStr[index]),
             error:
-              (list[currIndex].ans &&
-                list[currIndex].ans.multipleAnswer.includes(optionStr[index]) &&
-                !ans2.includes(optionStr[index])) ||
-              (list[currIndex].ans &&
-                !list[currIndex].ans.multipleAnswer.includes(
-                  optionStr[index]
-                ) &&
-                ans2.includes(optionStr[index]))
+              list[currIndex].ans &&
+              !list[currIndex].ans.multipleAnswer.includes(optionStr[index]) &&
+              ans2.includes(optionStr[index])
           }"
         >
           {{ optionStr[index] }}. {{ item }}
@@ -68,16 +62,16 @@
       <div class="answer" v-if="step > 1">
         <h3 class="answer-title">答案解析</h3>
         <div class="answer-rigth">
-          正确答案:
+          正确答案：
           {{
             list[currIndex].ans.singleAnswer ||
-              list[currIndex].ans.multipleAnswer
+              list[currIndex].ans.multipleAnswer.join(' ')
           }}
         </div>
         <div class="other">
-          <div>难度: {{ diffObj[list[currIndex].ans.difficulty] }}</div>
-          <div>提交次数: {{ list[currIndex].ans.submitNum }}</div>
-          <div>正确次数: {{ list[currIndex].ans.correctNum }}</div>
+          <div>难度：{{ diffObj[list[currIndex].ans.difficulty] }}</div>
+          <div>提交次数：{{ list[currIndex].ans.submitNum }}</div>
+          <div>正确次数： {{ list[currIndex].ans.correctNum }}</div>
         </div>
         <div class="answer-content">
           {{ list[currIndex].ans.answerAnalysis }}
