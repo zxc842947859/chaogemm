@@ -1,6 +1,8 @@
 <template>
   <div class="question-info">
-    <CGNavBar title="刷题" right="答题卡" path="/home/question"></CGNavBar>
+    <van-sticky>
+      <CGNavBar title="刷题" right="答题卡" path="/home/question"></CGNavBar>
+    </van-sticky>
     <div class="content" v-if="list.length && list[currIndex].detail">
       <p class="question-title">
         【{{ typeObj[list[currIndex].detail.type] }}】{{
