@@ -99,7 +99,12 @@
       <div class="e-num">23,453,245,000</div>
     </div>
     <div class="bottom">
-      <van-button type="primary" class="btn">模拟面试</van-button>
+      <van-button
+        type="primary"
+        class="btn"
+        @click="$router.push('/home/questionInfo')"
+        >模拟面试</van-button
+      >
     </div>
   </div>
 </template>

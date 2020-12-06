@@ -6,6 +6,7 @@ import Login from '@/views/login/Login'
 import Home from '@/views/home/Home'
 import Company from '@/views/home/company/Company'
 import Question from '@/views/home/question/Question'
+import QuestionInfo from '@/views/home/question/QuestionInfo'
 import Find from '@/views/home/find/Find'
 import Mine from '@/views/home/mine/Mine'
 import MineInfo from '@/views/home/mine/MineInfo'
@@ -98,6 +99,13 @@ const router = new VueRouter({
           path: '/home/technicInfo/:id',
           component: TechnicInfo,
           meta: {}
+        },
+        {
+          path: '/home/questionInfo',
+          component: QuestionInfo,
+          meta: {
+            needLogin: true
+          }
         }
       ]
     }
