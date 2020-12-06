@@ -1,7 +1,12 @@
 <template>
   <div class="question-info">
     <van-sticky>
-      <CGNavBar title="刷题" right="答题卡" path="/home/question"></CGNavBar>
+      <CGNavBar
+        title="刷题"
+        right="答题卡"
+        path="/home/question"
+        @navRightSave="dtk"
+      ></CGNavBar>
     </van-sticky>
     <div class="content" v-if="list.length && list[currIndex].detail">
       <p class="question-title">
@@ -132,7 +137,16 @@
         </div>
       </van-sticky>
       <ul class="question-card">
-        <li class="cardDef" v-for="(item, index) in list" :key="index">
+        <li
+          :class="{
+            cardDef: !list[index].ans && index !== currIndex,
+            cardCurr: index === currIndex && !list[index].ans,
+            cardRight: list[index].ans && list[index].ans.isRight,
+            cardErr: list[index].ans && !list[index].ans.isRight
+          }"
+          v-for="(item, index) in list"
+          :key="index"
+        >
           {{ index + 1 }}
         </li>
         <div class="nouse"></div>
@@ -161,7 +175,7 @@ export default {
       city: this.$route.query.city,
       type: this.$route.query.type,
       list: [], // 所有题目数组
-      currIndex: 1, // 当前第几题
+      currIndex: 0, // 当前第几题
       optionStr: 'ABCDEFG', // 答案选项
       typeObj: {
         1: '单选',
@@ -177,16 +191,20 @@ export default {
         2: '一般',
         3: '困难'
       },
-      showCard: true
+      showCard: false
     }
   },
   async created () {
     const res = await interviewQuestions({ type: this.type, city: this.city })
     console.log('题目', res)
     this.list = res.data.data
-    this.nextQuestion()
+    // this.nextQuestion()
   },
   methods: {
+    dtk () {
+      console.log(this.list)
+      this.showCard = true
+    },
     // 单选题选择
     ans1Click (index) {
       // 提交后不能再修改选项
@@ -482,19 +500,21 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    .cardDef {
+    li {
       text-align: center;
       line-height: 33px;
       width: 33px;
       height: 33px;
       border-radius: 50%;
-      border: 1px solid #b4b4bd;
       font-size: 14px;
       font-family: PingFangSC, PingFangSC-Regular;
       font-weight: 400;
-      color: #b4b4bd;
       letter-spacing: 0px;
       margin: 9px 8px 9px 8px;
+    }
+    .cardDef {
+      border: 1px solid #b4b4bd;
+      color: #b4b4bd;
     }
     .cardRight {
       background: #ddfad9;
@@ -503,6 +523,10 @@ export default {
     .cardErr {
       background: #ffefea;
       color: #ff4949;
+    }
+    .cardCurr {
+      background: #ffffff;
+      border: 1px solid #181a39;
     }
     .nouse {
       width: 33px;
