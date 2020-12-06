@@ -23,7 +23,7 @@
         <li
           class="option iconfont"
           :class="{
-            active: ans1 === optionStr[index] && !list[currIndex].ans,
+            sactive: ans1 === optionStr[index] && !list[currIndex].ans,
             right:
               list[currIndex].ans &&
               list[currIndex].ans.singleAnswer === optionStr[index],
@@ -46,7 +46,7 @@
           :key="index"
           @click="ans2Click(optionStr[index])"
           :class="{
-            active: ans2.includes(optionStr[index]) && !list[currIndex].ans,
+            mactive: ans2.includes(optionStr[index]) && !list[currIndex].ans,
             right:
               list[currIndex].ans &&
               list[currIndex].ans.multipleAnswer.includes(optionStr[index]),
@@ -132,7 +132,7 @@ export default {
       city: this.$route.query.city,
       type: this.$route.query.type,
       list: [], // 所有题目数组
-      currIndex: 15, // 当前第几题
+      currIndex: 1, // 当前第几题
       optionStr: 'ABCDEFG', // 答案选项
       typeObj: {
         1: '单选',
@@ -251,8 +251,12 @@ export default {
         color: #181a39;
         line-height: 22px;
       }
-      .active {
-        border-color: #000;
+      .sactive {
+        border: 1px solid #b4b4bd;
+      }
+      .mactive {
+        background: #f2f2f2;
+        border: 1px solid #b4b4bd;
       }
       .right {
         background: #ddfad9;
