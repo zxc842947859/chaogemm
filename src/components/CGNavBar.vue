@@ -1,7 +1,7 @@
 <template>
   <van-nav-bar
     placeholder
-    @click-left="$router.push(path)"
+    @click-left="leftEvent"
     @click-right="rightEvent"
     class="CGNavBar"
   >
@@ -45,6 +45,9 @@ export default {
   methods: {
     rightEvent () {
       this.$emit('navRightSave')
+    },
+    leftEvent () {
+      this.path ? this.$router.push(this.path) : this.$emit('back')
     }
   }
 }

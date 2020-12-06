@@ -116,121 +116,25 @@
         <van-button type="danger" class="btn" v-else>结束</van-button>
       </div>
     </div>
-    <van-popup v-model="showCard" position="bottom">
+    <van-popup v-model="showCard" position="top">
       <van-sticky>
         <CGNavBar
           title="答题卡"
-          :right="`<span style='color:red;'>2</span>/233题`"
-          @click.native="showCard = false"
+          :right="
+            `<span style='color:red;'>${currIndex + 1}</span>/${list.length}题`
+          "
+          path=""
+          @back="showCard = false"
         ></CGNavBar>
         <div class="card-title">
           选择题
-          <span class="question-num">共150题</span>
+          <span class="question-num">共{{ list.length }}题</span>
         </div>
       </van-sticky>
       <ul class="question-card">
-        <li class="tag">1</li>
-        <li class="tag">2</li>
-        <li class="tag">3</li>
-        <li class="tag">4</li>
-        <li class="tag">5</li>
-        <li class="tag">6</li>
-        <li class="tag">7</li>
-        <li class="tag">8</li>
-        <li class="tag">9</li>
-        <li class="tag">10</li>
-        <li class="tag">11</li>
-        <li class="tag">12</li>
-        <li class="tag">13</li>
-        <li class="tag">14</li>
-        <li class="tag">15</li>
-        <li class="tag">16</li>
-        <li class="tag">17</li>
-        <li class="tag">18</li>
-        <li class="tag">19</li>
-        <li class="tag">20</li>
-        <li class="tag">21</li>
-        <li class="tag">22</li>
-        <li class="tag">23</li>
-        <li class="tag">24</li>
-        <li class="tag">25</li>
-        <li class="tag">26</li>
-        <li class="tag">27</li>
-        <li class="tag">28</li>
-        <li class="tag">29</li>
-        <li class="tag">30</li>
-        <li class="tag">31</li>
-        <li class="tag">32</li>
-        <li class="tag">33</li>
-        <li class="tag">34</li>
-        <li class="tag">35</li>
-        <li class="tag">36</li>
-        <li class="tag">37</li>
-        <li class="tag">38</li>
-        <li class="tag">39</li>
-        <li class="tag">40</li>
-        <li class="tag">41</li>
-        <li class="tag">42</li>
-        <li class="tag">43</li>
-        <li class="tag">44</li>
-        <li class="tag">45</li>
-        <li class="tag">46</li>
-        <li class="tag">47</li>
-        <li class="tag">48</li>
-        <li class="tag">49</li>
-        <li class="tag">50</li>
-        <li class="tag">51</li>
-        <li class="tag">52</li>
-        <li class="tag">53</li>
-        <li class="tag">54</li>
-        <li class="tag">55</li>
-        <li class="tag">56</li>
-        <li class="tag">57</li>
-        <li class="tag">58</li>
-        <li class="tag">59</li>
-        <li class="tag">60</li>
-        <li class="tag">61</li>
-        <li class="tag">62</li>
-        <li class="tag">63</li>
-        <li class="tag">64</li>
-        <li class="tag">65</li>
-        <li class="tag">66</li>
-        <li class="tag">67</li>
-        <li class="tag">68</li>
-        <li class="tag">69</li>
-        <li class="tag">70</li>
-        <li class="tag">71</li>
-        <li class="tag">72</li>
-        <li class="tag">73</li>
-        <li class="tag">74</li>
-        <li class="tag">75</li>
-        <li class="tag">76</li>
-        <li class="tag">77</li>
-        <li class="tag">78</li>
-        <li class="tag">79</li>
-        <li class="tag">80</li>
-        <li class="tag">81</li>
-        <li class="tag">82</li>
-        <li class="tag">83</li>
-        <li class="tag">84</li>
-        <li class="tag">85</li>
-        <li class="tag">86</li>
-        <li class="tag">87</li>
-        <li class="tag">88</li>
-        <li class="tag">89</li>
-        <li class="tag">90</li>
-        <li class="tag">91</li>
-        <li class="tag">92</li>
-        <li class="tag">93</li>
-        <li class="tag">94</li>
-        <li class="tag">95</li>
-        <li class="tag">96</li>
-        <li class="tag">97</li>
-        <li class="tag">98</li>
-        <li class="tag">99</li>
-        <li class="tag">100</li>
-        <div class="nouse"></div>
-        <div class="nouse"></div>
+        <li class="cardDef" v-for="(item, index) in list" :key="index">
+          {{ index + 1 }}
+        </li>
         <div class="nouse"></div>
         <div class="nouse"></div>
         <div class="nouse"></div>
@@ -578,7 +482,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    li {
+    .cardDef {
       text-align: center;
       line-height: 33px;
       width: 33px;
@@ -591,6 +495,14 @@ export default {
       color: #b4b4bd;
       letter-spacing: 0px;
       margin: 9px 8px 9px 8px;
+    }
+    .cardRight {
+      background: #ddfad9;
+      color: #1dc779;
+    }
+    .cardErr {
+      background: #ffefea;
+      color: #ff4949;
     }
     .nouse {
       width: 33px;
