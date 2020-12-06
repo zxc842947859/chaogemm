@@ -14,9 +14,7 @@
       </div>
     </template>
     <template #right v-if="right">
-      <div class="right-txt">
-        {{ right }}
-      </div>
+      <div class="right-txt" v-html="right"></div>
     </template>
   </van-nav-bar>
 </template>
