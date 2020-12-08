@@ -1,5 +1,5 @@
 <template>
-  <div class="question" v-if="info">
+  <div class="question">
     <van-dropdown-menu>
       <van-dropdown-item ref="dropdown">
         <template #title>
@@ -9,7 +9,7 @@
         </template>
         <template #default>
           <van-index-bar
-            :index-list="Object.keys(info.citys)"
+            :index-list="info.citys && Object.keys(info.citys)"
             class="index-bar"
           >
             <div v-for="(val, key, index) in info.citys" :key="index">
@@ -36,7 +36,8 @@
     <div class="content">
       <div class="tag-list">
         <van-tag
-          v-for="(item, index) in info.cityPositions[city]"
+          v-for="(item, index) in info.cityPositions &&
+            info.cityPositions[city]"
           :key="index"
           color="#f7f4f5"
           text-color="#9797a8"
@@ -112,7 +113,7 @@ export default {
   data () {
     return {
       city: '北京',
-      info: '',
+      info: [],
       currentIndex: 0,
       gradientColor: {
         '0%': 'rgba(228, 1, 55, 0.7)',
@@ -200,15 +201,17 @@ export default {
   }
   .content {
     background: #fff;
-    padding: 25px @p15 10px;
+    padding: 10px @p15 0px;
     margin-bottom: 15px;
+    // min-height: 63px;
     .tag-list {
+      height: 100%;
       display: flex;
       overflow: auto;
       .tag {
         flex-shrink: 0; // 不自动缩放
         padding: 6px 15px;
-        margin-right: 15px;
+        margin: 0px 15px 10px 0px;
       }
       .active {
         background-color: #00b8d4 !important;
