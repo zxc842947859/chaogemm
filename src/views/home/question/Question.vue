@@ -7,7 +7,7 @@
             面试宝典<span class="city">{{ city }}</span>
           </div>
         </template>
-        <template #default>
+        <template #default v-if="info">
           <van-index-bar
             :index-list="info.citys && Object.keys(info.citys)"
             class="index-bar"
@@ -34,7 +34,7 @@
       </van-dropdown-item>
     </van-dropdown-menu>
     <div class="content">
-      <div class="tag-list">
+      <div class="tag-list" v-if="info">
         <van-tag
           v-for="(item, index) in info.cityPositions &&
             info.cityPositions[city]"
@@ -112,8 +112,8 @@ import { interviewFilters } from '@/api/question.js'
 export default {
   data () {
     return {
-      city: '北京',
-      info: [],
+      city: '全国',
+      info: '',
       currentIndex: 0,
       gradientColor: {
         '0%': 'rgba(228, 1, 55, 0.7)',
@@ -135,13 +135,25 @@ export default {
     },
     goInfo () {
       // 跳转至刷题同时传入查询参数
-      this.$router.push({
-        path: '/home/questionInfo',
-        query: {
-          type: this.info.cityPositions[this.city][this.currentIndex].id,
-          city: this.city
-        }
-      })
+      if (this.info) {
+        this.$router.push({
+          path: '/home/questionInfo',
+          query: {
+            type: this.info.cityPositions[this.city][this.currentIndex].id,
+            city: this.city
+          }
+        })
+      } else {
+        setTimeout(() => {
+          this.$router.push({
+            path: '/home/questionInfo',
+            query: {
+              type: this.info.cityPositions[this.city][this.currentIndex].id,
+              city: this.city
+            }
+          })
+        }, 2000)
+      }
     }
   }
 }

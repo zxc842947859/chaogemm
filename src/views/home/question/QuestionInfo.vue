@@ -231,7 +231,12 @@ export default {
       this.currIndex++
       // 获取当前题目详情
       const res = await questionsId(this.list[this.currIndex].id)
-      this.list[this.currIndex].detail = res.data.data
+
+      // this.list[this.currIndex].detail = res.data.data
+      const _temp = this.list[this.currIndex]
+      _temp.detail = res.data.data
+      this.$set(this.list, this.currIndex, _temp)
+
       // 新的一题状态恢复到初始
       this.step = 0
       this.ans1 = ''
