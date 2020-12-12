@@ -34,7 +34,7 @@
       </van-dropdown-item>
     </van-dropdown-menu>
     <div class="content">
-      <div class="tag-list" v-if="info">
+      <div class="tag-list" v-show="info">
         <van-tag
           v-for="(item, index) in info.cityPositions &&
             info.cityPositions[city]"
@@ -123,8 +123,10 @@ export default {
     }
   },
   async created () {
+    this.$toast.loading()
     const res = await interviewFilters()
     this.info = res.data.data
+    this.$toast.clear()
   },
   methods: {
     cityClick (item) {
@@ -216,10 +218,18 @@ export default {
     padding: 10px @p15 0px;
     margin-bottom: 15px;
     // min-height: 63px;
+    // overflow: hidden;
+
+    height: 48px;
     .tag-list {
       height: 100%;
       display: flex;
       overflow: auto;
+      &::-webkit-scrollbar {
+        width: 0;
+        display: none;
+      }
+
       .tag {
         flex-shrink: 0; // 不自动缩放
         padding: 6px 15px;
